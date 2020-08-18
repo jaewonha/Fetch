@@ -13,54 +13,81 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/singleDemoButton"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="다운로드 속도 측정"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/single_download_demo" />
+            />
 
         <Button
-            android:id="@+id/downloadListButton"
+            android:id="@+id/btnFix1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/download_list_demo" />
+            android:text="고정1(파르나스 입구)" />
 
         <Button
-            android:id="@+id/gameFilesButton"
+            android:id="@+id/btnFix2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/game_file_download_demo" />
+            android:text="고정2(별마당 도서관)" />
 
         <Button
-            android:id="@+id/multiEnqueueButton"
+            android:id="@+id/btnFix3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/failed_multi_enqueue" />
+            android:text="고정3(메가박스 영화관)" />
 
         <Button
-            android:id="@+id/multiFragmentButton"
+            android:id="@+id/btnMove1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/multi_fragment" />
+            android:text="이동1(파르나스~별마당)" />
 
         <Button
-            android:id="@+id/fileServerButton"
+            android:id="@+id/btnMove2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/file_server" />
+            android:text="이동2(별마당~메가박스)" />
 
         <Button
-            android:id="@+id/deleteAllButton"
+            android:id="@+id/btnMove3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="@string/delete_all_files" />
+            android:text="이동3(메가박스~파르나스)" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="응답시간 측정"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="!0dp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <Button
+            android:id="@+id/btnLatencySocket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="소켓 레이턴시" />
+
+        <Button
+            android:id="@+id/btnLatencyPing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="핑 테스트" />
 
     </LinearLayout>
 

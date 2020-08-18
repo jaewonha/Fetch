@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 
 import com.tonyodev.fetch2.AbstractFetchListener;
 import com.tonyodev.fetch2.DefaultFetchNotificationManager;
 import com.tonyodev.fetch2.Download;
 import com.tonyodev.fetch2.Error;
+import com.tonyodev.fetch2core.DownloadBlock;
 import com.tonyodev.fetch2core.Downloader;
 import com.tonyodev.fetch2.Fetch;
 import com.tonyodev.fetch2.FetchListener;
@@ -32,6 +34,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+    · (고정측정) 코엑스 실내외 특정 구간(예시: 파르나스 몰 입구 진입구간, 별마당 도서관, 메가박스 영화관)에서 고정상태 측정
+
+    · (이동측정) 이동상태(파르나스 ~ 별마당, 별마당 ~ 메가박스, 메가박스 ~ 파르나스)에서 이동상태 측정 (기지국이오버랩되지 않은 위치 확인 필요)
+
+   ① (속도측정) 이통3사 MEC 서버에 저장된 속도 측정용 콘텐츠*를 이통사별 단말기 10대**가 동시 접속하여 콘텐츠를 스트리밍 받으면서 5G 네트워크 속도 측정. 영상을 고화질로 재생하기 위한 속도가 일정하게 유지되어야 함
+ */
 public class DownloadListActivity extends AppCompatActivity implements ActionListener {
 
     private static final int STORAGE_PERMISSION_CODE = 200;
@@ -39,6 +48,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     private static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
     private static final int GROUP_ID = "listGroup".hashCode();
     static final String FETCH_NAMESPACE = "DownloadListActivity";
+    static final String TAG = "DownloadListActivity";
 
     private View mainView;
     private FileAdapter fileAdapter;
@@ -50,7 +60,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         setContentView(R.layout.activity_download_list);
         setUpViews();
         final FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(this)
-                .setDownloadConcurrentLimit(4)
+                .setDownloadConcurrentLimit(1)
                 .setHttpDownloader(new OkHttpDownloader(Downloader.FileDownloaderType.PARALLEL))
                 .setNamespace(FETCH_NAMESPACE)
                 .setNotificationManager(new DefaultFetchNotificationManager(this) {
@@ -116,8 +126,16 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
+        //fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int)
+        @Override
+        public void onStarted(@NotNull Download download, List<? extends DownloadBlock> downloadBlocks, int totalBlocks) {
+            Log.d(TAG,"started");
+            fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
+        }
+
         @Override
         public void onCompleted(@NotNull Download download) {
+            Log.d(TAG,"onCompleted:");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
@@ -129,6 +147,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
 
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
+            Log.d(TAG,"progress:" + etaInMilliseconds + "/" + downloadedBytesPerSecond);
             fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 
