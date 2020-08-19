@@ -78,17 +78,19 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
 
         switch (status) {
             case COMPLETED: {
-                holder.actionButton.setText(R.string.view);
+                //holder.actionButton.setText(R.string.view);
+                holder.actionButton.setText("");
                 holder.actionButton.setOnClickListener(view -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         Toast.makeText(context, "Downloaded Path:" + downloadData.download.getFile(), Toast.LENGTH_LONG).show();
-                        return;
+                        //return;
                     }
-                    final File file = new File(downloadData.download.getFile());
-                    final Uri uri1 = Uri.fromFile(file);
-                    final Intent share = new Intent(Intent.ACTION_VIEW);
-                    share.setDataAndType(uri1, Utils.getMimeType(context, uri1));
-                    context.startActivity(share);
+//                    final File file = new File(downloadData.download.getFile());
+//                    final Uri uri1 = Uri.fromFile(file);
+//                    final Intent share = new Intent(DownloadListActivity.INTENT_RECORD_EXPERIMENT);
+//                    share.setDataAndType(uri1, Utils.getMimeType(context, uri1));
+//                    context.startActivity(share);
+                    actionListener.onRecord();
                 });
                 break;
             }
@@ -101,7 +103,8 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
                 break;
             }
             case PAUSED: {
-                holder.actionButton.setText(R.string.resume);
+                //holder.actionButton.setText(R.string.resume);
+                holder.actionButton.setText("Start");
                 holder.actionButton.setOnClickListener(view -> {
                     holder.actionButton.setEnabled(false);
                     actionListener.onResumeDownload(downloadData.download.getId());
@@ -111,9 +114,11 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             case DOWNLOADING:
             case QUEUED: {
                 holder.actionButton.setText(R.string.pause);
+                holder.actionButton.setEnabled(false);
                 holder.actionButton.setOnClickListener(view -> {
-                    holder.actionButton.setEnabled(false);
-                    actionListener.onPauseDownload(downloadData.download.getId());
+                   // holder.actionButton.setEnabled(false);
+                   // actionListener.onPauseDownload(downloadData.download.getId());
+                    Toast.makeText(context,"Pause is disabled", Toast.LENGTH_SHORT);
                 });
                 break;
             }
@@ -126,6 +131,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
                 break;
             }
             default: {
+                System.err.println("unknown FileAdapter item status");
                 break;
             }
         }
@@ -206,7 +212,8 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             case FAILED:
                 return "Error";
             case PAUSED:
-                return "Paused";
+                //return "Paused";
+                return "Waiting";
             case QUEUED:
                 return "Waiting in Queue";
             case REMOVED:
@@ -227,6 +234,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
         public final Button actionButton;
         final TextView timeRemainingTextView;
         final TextView downloadedBytesPerSecondTextView;
+        //public DownloadInfo downloadInfo;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -237,6 +245,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             progressTextView = itemView.findViewById(R.id.progress_TextView);
             timeRemainingTextView = itemView.findViewById(R.id.remaining_TextView);
             downloadedBytesPerSecondTextView = itemView.findViewById(R.id.downloadSpeedTextView);
+            //downloadInfo = new DownloadInfo();
         }
 
     }

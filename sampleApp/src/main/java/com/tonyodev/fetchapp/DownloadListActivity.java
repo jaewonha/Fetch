@@ -1,7 +1,10 @@
 package com.tonyodev.fetchapp;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +15,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tonyodev.fetch2.AbstractFetchListener;
 import com.tonyodev.fetch2.DefaultFetchNotificationManager;
 import com.tonyodev.fetch2.Download;
@@ -30,6 +36,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -54,6 +65,11 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     private FileAdapter fileAdapter;
     private Fetch fetch;
 
+    SharedPreferences sharedpreferences;
+    private String expTag;
+    private DownloadInfo downloadInfo;
+    private EditText etLog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,43 +77,70 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         setUpViews();
         final FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(this)
                 .setDownloadConcurrentLimit(1)
-                .setHttpDownloader(new OkHttpDownloader(Downloader.FileDownloaderType.PARALLEL))
+                .setHttpDownloader(new OkHttpDownloader(Downloader.FileDownloaderType.SEQUENTIAL))
                 .setNamespace(FETCH_NAMESPACE)
-                .setNotificationManager(new DefaultFetchNotificationManager(this) {
-                    @NotNull
-                    @Override
-                    public Fetch getFetchInstanceForNamespace(@NotNull String namespace) {
-                        return fetch;
-                    }
-                })
+//                .setNotificationManager(new DefaultFetchNotificationManager(this) {
+//                    @NotNull
+//                    @Override
+//                    public Fetch getFetchInstanceForNamespace(@NotNull String namespace) {
+//                        return fetch;
+//                    }
+//                })
                 .build();
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
+
+
+        sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
+
+        expTag = getIntent().getStringExtra("expTag");
+        Log.e(TAG,"expTag:" + expTag);
+
+        downloadInfo = new DownloadInfo();
+        etLog = findViewById(R.id.etLog);
+
         checkStoragePermissions();
     }
 
+    private void checkExpDone() {
+        String expData = sharedpreferences.getString(expTag, null);
+        if(expData!=null) {
+            showExpSummary(expData);
+        } else {
+            enqueueDownloads();
+        }
+    }
+
+    private void showExpSummary(String expData){
+        DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
+
+        etLog.setText("");
+        etLog.append("*실험결과데이터\n");
+        etLog.append("시작시간:" + downloadInfo.startMs + "\n");
+        etLog.append("종료시간: " + downloadInfo.endMs + "\n");
+        etLog.append("해시 값: " + downloadInfo.hash + "\n");
+
+        findViewById(R.id.recyclerView).setVisibility(View.GONE);
+    }
+
     private void setUpViews() {
-        final SwitchCompat networkSwitch = findViewById(R.id.networkSwitch);
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         mainView = findViewById(R.id.activity_main);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        networkSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                fetch.setGlobalNetworkType(NetworkType.WIFI_ONLY);
-            } else {
-                fetch.setGlobalNetworkType(NetworkType.ALL);
-            }
-        });
+
         fileAdapter = new FileAdapter(this);
         recyclerView.setAdapter(fileAdapter);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        fetch.getDownloadsInGroup(GROUP_ID, downloads -> {
+        //fetch.getDownloadsInGroup(GROUP_ID, downloads -> {
+        fetch.getDownloads(downloads -> {
             final ArrayList<Download> list = new ArrayList<>(downloads);
             Collections.sort(list, (first, second) -> Long.compare(first.getCreated(), second.getCreated()));
             for (Download download : list) {
+                System.err.println("#### add");
                 fileAdapter.addDownload(download);
             }
         }).addListener(fetchListener);
@@ -115,6 +158,83 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         fetch.close();
     }
 
+
+    @Override
+    public void onBackPressed()
+    {
+        // code here to show dialog
+        fetch.deleteAll();
+        this.finish();
+        super.onBackPressed();  // optional depending on your needs
+    }
+
+    private void checkStoragePermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        } else {
+            checkExpDone();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            checkExpDone();
+        } else {
+            Snackbar.make(mainView, R.string.permission_not_enabled, Snackbar.LENGTH_INDEFINITE).show();
+        }
+    }
+
+    public void btnClickStart(View v) {
+        enqueueDownloads();
+    }
+    private void enqueueDownloads() {
+        //final List<Request> requests = Data.getFetchRequestWithGroupId(GROUP_ID);
+        final List<Request> requests = Data.getFetchSampleWithId((int)(Math.random()*9+0.5));
+
+        fetch.enqueue(requests, updatedRequests -> {
+
+        });
+        fetch.pauseAll();
+    }
+
+    @Override
+    public void onPauseDownload(int id) {
+        fetch.pause(id);
+    }
+
+    @Override
+    public void onResumeDownload(int id) {
+        fetch.resume(id);
+    }
+
+    @Override
+    public void onRemoveDownload(int id) {
+        fetch.remove(id);
+    }
+
+    @Override
+    public void onRetryDownload(int id) {
+        fetch.retry(id);
+    }
+
+
+    @Override
+    public void onRecord() {
+        Gson gson = new Gson();
+        String json = gson.toJson(downloadInfo);
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        Log.e(TAG,"recordResult:" + expTag + "/" + json);
+        editor.putString(expTag, json);
+        editor.commit();
+
+        checkExpDone();
+    }
+
+
     private final FetchListener fetchListener = new AbstractFetchListener() {
         @Override
         public void onAdded(@NotNull Download download) {
@@ -129,14 +249,47 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         //fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int)
         @Override
         public void onStarted(@NotNull Download download, List<? extends DownloadBlock> downloadBlocks, int totalBlocks) {
-            Log.d(TAG,"started");
+            downloadInfo.startMs = System.currentTimeMillis();
+            Log.d(TAG,"started:" + downloadInfo.startMs);
+            etLog.append("started:" + downloadInfo.startMs + "\n");
+
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onCompleted(@NotNull Download download) {
-            Log.d(TAG,"onCompleted:");
+            downloadInfo.endMs = System.currentTimeMillis();
+            Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
+            etLog.append("completed:" + downloadInfo.endMs + "\n");
+
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    etLog.append("Computing Hash...\n");
+                }
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    try {
+                        File file = new File(download.getFile());
+                        downloadInfo.hash = generateSHA256(file);
+                        Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
+                        etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
         }
 
         @Override
@@ -148,6 +301,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
             Log.d(TAG,"progress:" + etaInMilliseconds + "/" + downloadedBytesPerSecond);
+            etLog.append("progress:" + etaInMilliseconds + "/" + downloadedBytesPerSecond + "\n");
             fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 
@@ -177,50 +331,46 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         }
     };
 
-    private void checkStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        } else {
-            enqueueDownloads();
+
+    public static String generateMD5(File file) throws Exception {
+        return hashFile(file, "MD5");
+    }
+
+    public static String generateSHA1(File file) throws Exception {
+        return hashFile(file, "SHA-1");
+    }
+
+    public static String generateSHA256(File file) throws Exception {
+        return hashFile(file, "SHA-256");
+    }
+
+    private static String convertByteArrayToHexString(byte[] arrayBytes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < arrayBytes.length; i++) {
+            stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16)
+                    .substring(1));
+        }
+        return stringBuffer.toString();
+    }
+
+    private static String hashFile(File file, String algorithm)
+            throws Exception {
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+            byte[] bytesBuffer = new byte[1024];
+            int bytesRead = -1;
+
+            while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+                digest.update(bytesBuffer, 0, bytesRead);
+            }
+
+            byte[] hashedBytes = digest.digest();
+
+            return convertByteArrayToHexString(hashedBytes);
+        } catch (NoSuchAlgorithmException | IOException ex) {
+            throw new Exception(
+                    "Could not generate hash from file", ex);
         }
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            enqueueDownloads();
-        } else {
-            Snackbar.make(mainView, R.string.permission_not_enabled, Snackbar.LENGTH_INDEFINITE).show();
-        }
-    }
-
-    private void enqueueDownloads() {
-        final List<Request> requests = Data.getFetchRequestWithGroupId(GROUP_ID);
-        fetch.enqueue(requests, updatedRequests -> {
-
-        });
-
-    }
-
-    @Override
-    public void onPauseDownload(int id) {
-        fetch.pause(id);
-    }
-
-    @Override
-    public void onResumeDownload(int id) {
-        fetch.resume(id);
-    }
-
-    @Override
-    public void onRemoveDownload(int id) {
-        fetch.remove(id);
-    }
-
-    @Override
-    public void onRetryDownload(int id) {
-        fetch.retry(id);
-    }
-
 }

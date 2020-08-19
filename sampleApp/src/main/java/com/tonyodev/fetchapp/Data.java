@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.tonyodev.fetch2.Priority;
 import com.tonyodev.fetch2.Request;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,64 @@ public final class Data {
 //            "http://storage.googleapis.com/ix_choosemuse/uploads/2016/02/android-logo.png",
 //            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
     };
+
+
+//    public static final String[] sampleIDs = new String[]{
+//            "http://speedtest.ftp.otenet.gr/files/test100Mb.db", //0
+//            "http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v",
+//            "http://media.mongodb.org/zips.json",
+//            "http://www.exampletonyotest/some/unknown/123/Errorlink.txt",
+//            "http://storage.googleapis.com/ix_choosemuse/uploads/2016/02/android-logo.png",
+//            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+//            "http://speedtest.ftp.otenet.gr/files/test100Mb.db",
+//            "http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v",
+//            "http://media.mongodb.org/zips.json",
+//            "http://www.exampletonyotest/some/unknown/123/Errorlink.txt" //9
+//    };
+
+      //public static final String URL = "http://192.168.1.62:8080;
+      public static final String URL = "http://5gmec-test.maxstlab.com";
+      
+//    public static final String[] sampleIDs = new String[]{
+//            URL + "/data/1000M.raw", //0
+//            URL + "/data/100M.raw",
+//            URL + "/data/1000M.raw",
+//            URL + "/data/100M.raw",
+//            URL + "/data/1000M.raw",
+//            URL + "/data/100M.raw",
+//            URL + "/data/1000M.raw",
+//            URL + "/data/100M.raw",
+//            URL + "/data/1000M.raw",
+//            URL + "/data/100M.raw",
+//    };
+
+    public static final String[] sampleIDs = new String[]{
+            URL + "/data/100M.raw", //0
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+            URL + "/data/100M.raw",
+    };
+
+//    public static final String[] sampleIDs = new String[]{
+//            URL + "/data/1K.raw", //0
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//            URL + "/data/1K.raw",
+//    };
+
+
 
     private Data() {
 
@@ -37,6 +96,16 @@ public final class Data {
     }
 
     @NonNull
+    public static List<Request> getFetchSampleWithId(final int id) {
+        final List<Request> requests = new ArrayList<>();
+
+        final Request request = new Request(sampleIDs[id], getFilePath(sampleIDs[id]));
+        requests.add(request);
+
+        return requests;
+    }
+
+    @NonNull
     public static List<Request> getFetchRequestWithGroupId(final int groupId) {
         final List<Request> requests = getFetchRequests();
         for (Request request : requests) {
@@ -44,6 +113,8 @@ public final class Data {
         }
         return requests;
     }
+
+
 
     @NonNull
     private static String getFilePath(@NonNull final String url) {

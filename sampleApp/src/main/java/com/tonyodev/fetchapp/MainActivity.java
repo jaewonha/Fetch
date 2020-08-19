@@ -1,6 +1,7 @@
 package com.tonyodev.fetchapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -31,50 +32,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainView = findViewById(R.id.activity_main);
+    }
 
-        findViewById(R.id.singleDemoButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, SingleDownloadActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
+    public void btnClick(View v) {
+        int btnId = v.getId();
 
-        findViewById(R.id.downloadListButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, DownloadListActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
-
-        findViewById(R.id.gameFilesButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, GameFilesActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
-
-        findViewById(R.id.multiEnqueueButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, FailedMultiEnqueueActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
-
-        findViewById(R.id.multiFragmentButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, FragmentActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
-
-        findViewById(R.id.fileServerButton).setOnClickListener(v -> {
-            final Intent intent = new Intent(MainActivity.this, FileServerActivity.class);
-            MainActivity.this.startActivity(intent);
-        });
-
-        findViewById(R.id.deleteAllButton).setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-            } else {
-                deleteDownloadedFiles();
-            }
-        });
-
-        ViewGroup container = ((ViewGroup) findViewById(R.id.singleDemoButton).getParent());
-        for (int i = 0; i < container.getChildCount(); i++) {
-            TextView button = (TextView) container.getChildAt(i);
-            button.setAllCaps(false);
+        Intent intent;
+        switch(btnId) {
+            case R.id.btnLatencyPing:
+                intent = new Intent(MainActivity.this, PingActivity.class);
+                break;
+            case R.id.btnLatencySocket:
+                intent = new Intent(MainActivity.this, SocketActivity.class);
+                break;
+            case R.id.btnResult:
+                intent = new Intent(MainActivity.this, ExperimentResultActivity.class);
+                break;
+            case R.id.btnDelete:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                } else {
+                    deleteDownloadedFiles();
+                }
+                return;
+            default:
+                intent = new Intent(MainActivity.this, DownloadListActivity.class);
+                //intent = new Intent(MainActivity.this, SingleDownloadActivity.class);
         }
+
+        intent.putExtra("expTag", (String)v.getTag());
+        MainActivity.this.startActivity(intent);
     }
 
     private void deleteDownloadedFiles() {
@@ -98,10 +85,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             final File fetchDir = new File(Data.getSaveDir());
             Utils.deleteFileAndContents(fetchDir);
-            Toast.makeText(MainActivity.this, R.string.downloaded_files_deleted, Toast.LENGTH_SHORT).show();
+            boolean result = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE).edit().clear().commit();
+            Toast.makeText(MainActivity.this, "Delete:" + (result ? "Success" : "Fail"), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     @Override

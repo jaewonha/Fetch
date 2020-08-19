@@ -25,45 +25,63 @@
 
         <Button
             android:id="@+id/btnFix1"
+            android:tag="expFix1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정1(파르나스 입구)" />
+            android:text="고정1(파르나스 입구)"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnFix2"
+            android:tag="expFix2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정2(별마당 도서관)" />
+            android:text="고정2(별마당 도서관)"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnFix3"
+            android:tag="expFix3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정3(메가박스 영화관)" />
+            android:text="고정3(메가박스 영화관)"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnMove1"
+            android:tag="expMove1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동1(파르나스~별마당)" />
+            android:text="이동1(파르나스~별마당)"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnMove2"
+            android:tag="expMove2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동2(별마당~메가박스)" />
+            android:text="이동2(별마당~메가박스)"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnMove3"
+            android:tag="expMove3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동3(메가박스~파르나스)" />
+            android:text="이동3(메가박스~파르나스)"
+            android:onClick="btnClick"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,23 +89,58 @@
             android:text="응답시간 측정"
             android:textSize="20sp"
             android:layout_gravity="center"
-            android:layout_marginTop="!0dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             />
 
         <Button
             android:id="@+id/btnLatencySocket"
+            android:tag="expLatencySocket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="소켓 레이턴시" />
+            android:text="소켓 레이턴시"
+            android:onClick="btnClick"
+            />
 
         <Button
             android:id="@+id/btnLatencyPing"
+            android:tag="expLatencyPing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="핑 테스트" />
+            android:text="핑 테스트"
+            android:onClick="btnClick"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="결과"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <Button
+            android:id="@+id/btnResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="결과 보기"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="초기화"
+            android:onClick="btnClick"
+            />
 
     </LinearLayout>
 

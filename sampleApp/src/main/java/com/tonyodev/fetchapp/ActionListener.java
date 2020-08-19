@@ -9,4 +9,6 @@ public interface ActionListener {
     void onRemoveDownload(int id);
 
     void onRetryDownload(int id);
+
+    void onRecord();
 }
