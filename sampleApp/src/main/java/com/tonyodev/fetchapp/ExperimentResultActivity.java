@@ -2,13 +2,17 @@ package com.tonyodev.fetchapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tonyodev.fetch2.AbstractFetchListener;
@@ -36,11 +41,14 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -67,8 +75,6 @@ public class ExperimentResultActivity extends AppCompatActivity  {
         checkStoragePermissions();
 
         tvExpResult = findViewById(R.id.tvExpResult);
-
-
     }
 
     @Override
@@ -94,10 +100,51 @@ public class ExperimentResultActivity extends AppCompatActivity  {
         }
     }
 
-//    public void btnClickStart(View v) {
-//
-//    }
+    public void btnClickSave(View v) {
+        String expResult = tvExpResult.getText().toString();
 
+        Date date = new Date() ;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
+
+        String fileName = "exp_" + dateFormat.format(date) + ".txt";
+
+        try {
+            File writtenFile = writeToFile(fileName, expResult);
+
+            Toast.makeText(this, "파일 저장 성공:" + writtenFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+
+            openFile(writtenFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "파일 저장 실패:" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void openFile(File writtenFile) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        Uri fileUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", writtenFile);
+        //Uri fileUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", writtenFile);
+        intent.setData(fileUri);
+
+        startActivity(intent);
+    }
+
+    private File writeToFile(String fileName, String content) throws IOException {
+            File file = new File(Environment.getExternalStorageDirectory() + "/" + fileName);
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file);
+            writer.append(content);
+            writer.flush();
+            writer.close();
+
+            return file;
+    }
 
     private void loadExpData() {
         String[] expNameList = {
@@ -107,23 +154,26 @@ public class ExperimentResultActivity extends AppCompatActivity  {
                 "expMove1",
                 "expMove2",
                 "expMove3",
-                "expLatencySocket",
-                "expLatencyPing"
+                "socketExpResultSummary",
+                "pingExpResultSummary"
         };
 
         for(String expName : expNameList) {
             String expData = sharedpreferences.getString(expName, null);
             System.err.println(expName + ":" + expData);
 
-            tvExpResult.append(expName + "\n");
+            tvExpResult.append(expName + "\n\n");
 
             if(expData!=null) {
-                DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
+                if( expName.compareTo("socketExpResultSummary")==0 ||
+                    expName.compareTo("pingExpResultSummary")==0 )
+                {
+                    tvExpResult.append(expData + "\n\n");
+                } else {
+                    DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
+                    tvExpResult.append(downloadInfo.toString() + "\n");
+                }
 
-                tvExpResult.append(downloadInfo.startMs + "\n");
-                tvExpResult.append(downloadInfo.endMs + "\n");
-                tvExpResult.append(downloadInfo.hash + "\n");
-                tvExpResult.append("\n");
             } else {
                 tvExpResult.append("None\n\n");
             }

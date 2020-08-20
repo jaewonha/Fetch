@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start"
-            android:onClick="btnClickStart"/>
-
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -22,12 +16,37 @@
             android:layout_marginBottom="20dp"
             />
 
+        <LinearLayout
+            android:id="@+id/llCmd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Start"
+                    android:onClick="btnClickStart"
+                    android:layout_marginRight="50dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Record"
+                    android:onClick="btnClickRecord"/>
+
+        </LinearLayout>
+
         <EditText
             android:id="@+id/etExpResult"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:gravity="top"
+            android:layout_gravity="top"
             />
 
 </LinearLayout>

@@ -107,25 +107,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="114e3493-5bb6-4cee-aaa2-7e759b59c460" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_stealthcopter_AndroidNetworkTools_0_4_5_3_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/res/layout/activity_ping.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/res/layout/activity_socket.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SetupActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/layout/activity_setup.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ActionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ActionListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_ping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_ping.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_socket.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_socket.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -141,30 +139,50 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sampleApp" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.27389705">
+    <splitter split-orientation="horizontal" split-proportion="0.31924018">
       <split-first>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="321">
-                  <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+                <state relative-caret-position="323">
+                  <caret line="34" column="42" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#1686#1687#0" expanded="true" />
-                    <element signature="e#1738#1739#0" expanded="true" />
-                    <element signature="e#2099#2100#0" expanded="true" />
-                    <element signature="e#2157#2158#0" expanded="true" />
-                    <element signature="e#3069#3070#0" expanded="true" />
-                    <element signature="e#3134#3135#0" expanded="true" />
-                    <element signature="e#2841#2842#0" expanded="true" />
-                    <element signature="e#2906#2907#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="160">
+                  <caret line="258" selection-start-line="258" selection-end-line="258" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="190">
+                  <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -172,7 +190,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SingleDownloadActivity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1259">
+                <state relative-caret-position="1368">
                   <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
                 </state>
               </provider>
@@ -181,8 +199,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="372">
-                  <caret line="74" column="35" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
+                <state relative-caret-position="290">
+                  <caret line="29" column="27" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
                 </state>
               </provider>
             </entry>
@@ -190,209 +208,165 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="321">
-                  <caret line="53" column="38" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
+                <state relative-caret-position="340">
+                  <caret line="94" selection-start-line="94" selection-end-line="94" />
                   <folding>
-                    <element signature="e#1552#1553#0" expanded="true" />
-                    <element signature="e#1604#1605#0" expanded="true" />
-                    <element signature="e#2285#2286#0" expanded="true" />
-                    <element signature="e#2351#2352#0" expanded="true" />
-                    <element signature="e#3803#3804#0" expanded="true" />
-                    <element signature="e#3861#3862#0" expanded="true" />
+                    <element signature="e#2013#2503#0" expanded="true" />
+                    <element signature="e#2502#2503#0" expanded="true" />
+                    <element signature="e#4680#4681#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_socket.xml">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="209">
-                  <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
+                <state relative-caret-position="266">
+                  <caret line="33" column="43" selection-start-line="33" selection-start-column="43" selection-end-line="33" selection-end-column="43" />
                 </state>
               </provider>
-              <provider editor-type-id="android-designer2" />
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_ping.xml">
+            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml">
+              <provider editor-type-id="android-designer2" />
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="494">
-                  <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
+                <state relative-caret-position="304">
+                  <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
                 </state>
               </provider>
-              <provider editor-type-id="android-designer2" />
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="323">
-                  <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
+                <state relative-caret-position="361">
+                  <caret line="68" column="49" lean-forward="true" selection-start-line="68" selection-start-column="49" selection-end-line="68" selection-end-column="49" />
                 </state>
               </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml">
               <provider editor-type-id="android-designer2" />
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-8">
+                  <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+                </state>
+              </provider>
             </entry>
           </file>
         </leaf>
       </split-first>
       <split-second>
-        <splitter split-orientation="horizontal" split-proportion="0.7075099">
-          <split-first>
-            <leaf>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="834">
-                      <caret line="81" column="45" selection-start-line="81" selection-start-column="45" selection-end-line="81" selection-end-column="45" />
-                      <folding>
-                        <element signature="method#onCreateViewHolder#0;class#FileAdapter#0" />
-                        <element signature="e#1631#1692#1" />
-                        <element signature="e#2078#2165#1" />
-                        <element signature="e#2350#2415#1" />
-                        <element signature="e#2421#2529#1" />
-                        <element signature="e#2587#2663#1" />
-                        <element signature="e#2669#2819#1" />
-                        <element signature="e#3802#3971#0" />
-                        <element signature="e#4155#4325#0" />
-                        <element signature="e#4538#4707#0" />
-                        <element signature="e#4892#5062#0" />
-                        <element signature="e#5962#6230#1" />
-                        <element signature="e#6081#6220#1" />
-                        <element signature="e#6669#6670#0" expanded="true" />
-                        <element signature="e#6708#6709#0" expanded="true" />
-                        <element signature="method#toString#0;class#DownloadData#0;class#FileAdapter#0" />
-                        <element signature="e#9612#9654#1" />
-                        <element signature="method#equals#0;class#DownloadData#0;class#FileAdapter#0" />
-                      </folding>
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="true">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="714">
-                      <caret line="80" lean-forward="true" selection-start-line="68" selection-end-line="80" />
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="606">
-                      <caret line="125" column="41" selection-start-line="120" selection-start-column="16" selection-end-line="125" selection-end-column="41" />
-                      <folding>
-                        <element signature="e#2130#2131#0" expanded="true" />
-                        <element signature="e#2162#2163#0" expanded="true" />
-                        <element signature="e#5675#5706#0" expanded="true" />
-                      </folding>
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="513">
-                      <caret line="27" column="55" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
-                    </state>
-                  </provider>
-                  <provider editor-type-id="android-manifest" />
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ActionListener.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="266">
-                      <caret line="14" selection-start-line="14" selection-end-line="14" />
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="760">
-                      <caret line="59" column="18" selection-start-line="59" selection-start-column="18" selection-end-line="59" selection-end-column="18" />
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="347">
-                      <caret line="115" column="26" selection-start-line="115" selection-start-column="26" selection-end-line="115" selection-end-column="26" />
-                      <folding>
-                        <element signature="e#6439#6470#0" expanded="true" />
-                        <element signature="e#5915#5916#0" expanded="true" />
-                        <element signature="e#5949#5950#0" expanded="true" />
-                        <element signature="e#6322#6323#0" expanded="true" />
-                        <element signature="e#6353#6354#0" expanded="true" />
-                        <element signature="e#6411#6412#0" expanded="true" />
-                        <element signature="e#6443#6444#0" expanded="true" />
-                        <element signature="e#6501#6502#0" expanded="true" />
-                        <element signature="e#6533#6534#0" expanded="true" />
-                        <element signature="e#6590#6591#0" expanded="true" />
-                        <element signature="e#6621#6622#0" expanded="true" />
-                        <element signature="e#7102#7103#0" expanded="true" />
-                        <element signature="e#7159#7160#0" expanded="true" />
-                        <element signature="e#9209#9210#0" expanded="true" />
-                        <element signature="e#9275#9276#0" expanded="true" />
-                      </folding>
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-            </leaf>
-          </split-first>
-          <split-second>
-            <leaf>
-              <file pinned="false" current-in-tab="true">
-                <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="573">
-                      <caret line="263" selection-start-line="263" selection-end-line="263" />
-                      <folding>
-                        <element signature="method#onCreateViewHolder#0;class#FileAdapter#0" />
-                        <element signature="e#2078#2165#1" />
-                        <element signature="e#2350#2415#1" />
-                        <element signature="e#2421#2529#1" />
-                        <element signature="e#2587#2663#1" />
-                        <element signature="e#2669#2819#1" />
-                        <element signature="e#4522#4536#0" expanded="true" />
-                        <element signature="e#4817#4834#0" expanded="true" />
-                        <element signature="e#5962#6230#1" />
-                        <element signature="e#6081#6220#1" />
-                        <element signature="e#6669#6670#0" expanded="true" />
-                        <element signature="e#6708#6709#0" expanded="true" />
-                        <element signature="e#6883#7654#1" />
-                        <element signature="e#7009#7644#1" />
-                        <element signature="e#7057#7606#0" />
-                        <element signature="e#7127#7286#1" />
-                        <element signature="e#7316#7588#1" />
-                        <element signature="method#toString#0;class#DownloadData#0;class#FileAdapter#0" />
-                        <element signature="e#9612#9654#1" />
-                        <element signature="method#equals#0;class#DownloadData#0;class#FileAdapter#0" />
-                      </folding>
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/Status.kt">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="355">
-                      <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-            </leaf>
-          </split-second>
-        </splitter>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="343">
+                  <caret line="95" column="31" selection-start-line="95" selection-start-column="31" selection-end-line="95" selection-end-column="31" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="399">
+                  <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="365">
+                  <caret line="127" column="19" selection-start-line="127" selection-start-column="19" selection-end-line="127" selection-end-column="19" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
+              <provider editor-type-id="android-manifest" />
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="377">
+                  <caret line="38" column="47" lean-forward="true" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="559">
+                  <caret line="248" selection-start-line="248" selection-end-line="248" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_setup.xml">
+              <provider editor-type-id="android-designer2" />
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="361">
+                  <caret line="19" selection-start-line="19" selection-end-line="19" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SetupActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="437">
+                  <caret line="23" column="56" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_ping.xml">
+              <provider editor-type-id="android-designer2" />
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="361">
+                  <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="312">
+                  <caret line="116" column="40" selection-start-line="116" selection-start-column="40" selection-end-line="116" selection-end-column="40" />
+                  <folding>
+                    <element signature="e#1987#2477#0" expanded="true" />
+                    <element signature="e#2476#2477#0" expanded="true" />
+                    <element signature="e#3704#3705#0" expanded="true" />
+                    <element signature="e#3762#3763#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/java/net/Socket.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="640">
+                  <caret line="213" column="11" selection-start-line="213" selection-start-column="11" selection-end-line="213" selection-end-column="11" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
       </split-second>
     </splitter>
   </component>
@@ -400,41 +374,42 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>btnClick</find>
-      <find>R.id.btn</find>
-      <find>btnId</find>
-      <find>expId</find>
-      <find>/exp</find>
-      <find>expTag</find>
-      <find>sharedpreferences</find>
+      <find>onBackP</find>
+      <find>activity_download_list</find>
+      <find>EditTe</find>
       <find>record</find>
-      <find>Data</find>
-      <find>STORAGE_PERMISSION_CODE</find>
-      <find>sharedpreferences =</find>
-      <find>shared</find>
-      <find>mainView</find>
-      <find>1B</find>
+      <find>onRe</find>
       <find>onRecord</find>
-      <find>실험결과데이터</find>
-      <find>Permission</find>
-      <find>com.github.potterhsu:Pinger:v1.1</find>
-      <find>Async</find>
-      <find>etExpResult</find>
-      <find>allprojects</find>
-      <find>getError</find>
-      <find>etExpResult.append</find>
-      <find>doPing</find>
-      <find>*Resu</find>
-      <find>enqueue</find>
-      <find>&quot;http://192.168.1.62:8080</find>
-      <find>etLog =</find>
-      <find>.commit</find>
-      <find>RECORD</find>
+      <find>Summary</find>
+      <find>bytePerSec =</find>
+      <find>etLog.append(</find>
+      <find>+ &quot;\n&quot;);</find>
+      <find>downloadInfo.</find>
+      <find>onStart</find>
+      <find>activity</find>
+      <find>시작시간</find>
+      <find>Handler</find>
+      <find>http://</find>
+      <find>URL</find>
+      <find>PORT</find>
+      <find>+0.5</find>
+      <find>round</find>
+      <find>getFetchSampleWithId</find>
+      <find>downloadInfo.url =</find>
+      <find>hash =</find>
+      <find>.url</find>
+      <find>Path</find>
+      <find>Downloaded path</find>
+      <find>Data.R</find>
+      <find>Data.UR</find>
+      <find>SharedPre</find>
+      <find>edit</find>
     </findStrings>
     <replaceStrings>
       <replace>Exception</replace>
@@ -446,6 +421,8 @@
       <replace>1K</replace>
       <replace>log</replace>
       <replace>URL + &quot;</replace>
+      <replace>+ &quot;\n&quot; +</replace>
+      <replace>this.</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -456,25 +433,28 @@
       <list>
         <option value="$PROJECT_DIR$/../patch.diff" />
         <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ActionListener.java" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketAcvitity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/EchoServerThread.java" />
         <option value="$PROJECT_DIR$/../fetch2/build.gradle" />
         <option value="$PROJECT_DIR$/../build.gradle" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_setup.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SetupActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_socket.xml" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_ping.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_socket.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/xml/provider_paths.xml" />
         <option value="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java" />
       </list>
     </option>
   </component>
@@ -490,6 +470,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -510,31 +491,34 @@
             <path>
               <item name="sampleApp" type="1abcf292:AndroidViewProjectNode" />
               <item name="sampleApp" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="fetchapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
             </path>
             <path>
               <item name="sampleApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+              <item name="sampleApp" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="xml" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="ExportApk.ApkPath" value="C:\Code\Fetch\sampleApp" />
+    <property name="ExportApk.BuildVariants" value="release" />
+    <property name="ExportApk.SignV2" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="device.picker.selection" value="R3CN50LRL3F" />
+    <property name="device.picker.selection" value="Nexus_5X_API_28" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="not.eligible.for.single.variant.sync" value="true" />
     <property name="project.structure.last.edited" value="Dependencies" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="settings.editor.selected.configurable" value="preferences.updates" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -636,7 +620,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.13006397" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.13006397" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -644,23 +628,23 @@
       <window_info id="Designer" order="6" />
       <window_info id="Resources Explorer" order="7" />
       <window_info id="Capture Tool" order="8" />
-      <window_info anchor="bottom" id="Run" weight="0.329718" />
-      <window_info anchor="bottom" id="Debug" />
-      <window_info anchor="bottom" id="Find" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.329718" />
-      <window_info anchor="bottom" id="Logcat" order="1" weight="0.6496746" />
+      <window_info anchor="bottom" id="Logcat" order="1" visible="true" weight="0.38503253" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Terminal" order="3" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
-      <window_info anchor="bottom" id="Build" order="5" weight="0.329718" />
+      <window_info anchor="bottom" id="Build" order="5" weight="0.32936078" />
       <window_info anchor="bottom" id="Android Profiler" order="6" />
-      <window_info anchor="right" id="Hierarchy" weight="0.32995737" />
-      <window_info anchor="right" id="Preview" weight="0.32995737" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.329718" />
+      <window_info anchor="bottom" id="Debug" order="8" />
+      <window_info anchor="bottom" id="Find" order="9" weight="0.329718" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="right" id="Gradle" order="2" weight="0.32995737" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
+      <window_info anchor="right" id="Hierarchy" order="5" weight="0.32995737" />
+      <window_info anchor="right" id="Preview" order="6" weight="0.32995737" />
     </layout>
     <layout-to-restore>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
@@ -696,7 +680,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java</url>
-          <line>114</line>
+          <line>111</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
@@ -708,13 +692,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/Status.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -777,13 +754,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/Download.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/content/Intent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
@@ -813,51 +783,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="125" column="41" selection-start-line="120" selection-start-column="16" selection-end-line="125" selection-end-column="41" />
-          <folding>
-            <element signature="e#2130#2131#0" expanded="true" />
-            <element signature="e#2162#2163#0" expanded="true" />
-            <element signature="e#5675#5706#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="13" selection-start-column="6" selection-end-column="13" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="22" lean-forward="true" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/EchoServerThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" lean-forward="true" selection-start-line="2" selection-end-line="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/EchoServerThread.java" />
     <entry file="file://$PROJECT_DIR$/../fetch2/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -921,140 +847,187 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java">
+    <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/FetchConfiguration.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="53" column="38" selection-start-line="53" selection-start-column="38" selection-end-line="53" selection-end-column="38" />
-          <folding>
-            <element signature="e#1552#1553#0" expanded="true" />
-            <element signature="e#1604#1605#0" expanded="true" />
-            <element signature="e#2285#2286#0" expanded="true" />
-            <element signature="e#2351#2352#0" expanded="true" />
-            <element signature="e#3803#3804#0" expanded="true" />
-            <element signature="e#3861#3862#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="113">
+          <caret line="140" column="26" selection-start-line="140" selection-start-column="26" selection-end-line="140" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_socket.xml">
+    <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/Download.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_ping.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1686#1687#0" expanded="true" />
-            <element signature="e#1738#1739#0" expanded="true" />
-            <element signature="e#2099#2100#0" expanded="true" />
-            <element signature="e#2157#2158#0" expanded="true" />
-            <element signature="e#3069#3070#0" expanded="true" />
-            <element signature="e#3134#3135#0" expanded="true" />
-            <element signature="e#2841#2842#0" expanded="true" />
-            <element signature="e#2906#2907#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="55" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="760">
-          <caret line="59" column="18" selection-start-line="59" selection-start-column="18" selection-end-line="59" selection-end-column="18" />
+        <state relative-caret-position="311">
+          <caret line="117" column="32" selection-start-line="117" selection-start-column="8" selection-end-line="117" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SingleDownloadActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1259">
+        <state relative-caret-position="1368">
           <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_download_list.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
-        </state>
-      </provider>
       <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="115" column="26" selection-start-line="115" selection-start-column="26" selection-end-line="115" selection-end-column="26" />
+        <state relative-caret-position="304">
+          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2603">
+          <caret line="137" column="47" selection-start-line="137" selection-start-column="47" selection-end-line="137" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../fetch2/src/main/java/com/tonyodev/fetch2/Status.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SetupActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="56" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
           <folding>
-            <element signature="e#6439#6470#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5949#5950#0" expanded="true" />
-            <element signature="e#6322#6323#0" expanded="true" />
-            <element signature="e#6353#6354#0" expanded="true" />
-            <element signature="e#6411#6412#0" expanded="true" />
-            <element signature="e#6443#6444#0" expanded="true" />
-            <element signature="e#6501#6502#0" expanded="true" />
-            <element signature="e#6533#6534#0" expanded="true" />
-            <element signature="e#6590#6591#0" expanded="true" />
-            <element signature="e#6621#6622#0" expanded="true" />
-            <element signature="e#7102#7103#0" expanded="true" />
-            <element signature="e#7159#7160#0" expanded="true" />
-            <element signature="e#9209#9210#0" expanded="true" />
-            <element signature="e#9275#9276#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="834">
-          <caret line="81" column="45" selection-start-line="81" selection-start-column="45" selection-end-line="81" selection-end-column="45" />
-          <folding>
-            <element signature="method#onCreateViewHolder#0;class#FileAdapter#0" />
-            <element signature="e#1631#1692#1" />
-            <element signature="e#2078#2165#1" />
-            <element signature="e#2350#2415#1" />
-            <element signature="e#2421#2529#1" />
-            <element signature="e#2587#2663#1" />
-            <element signature="e#2669#2819#1" />
-            <element signature="e#3802#3971#0" />
-            <element signature="e#4155#4325#0" />
-            <element signature="e#4538#4707#0" />
-            <element signature="e#4892#5062#0" />
-            <element signature="e#5962#6230#1" />
-            <element signature="e#6081#6220#1" />
-            <element signature="e#6669#6670#0" expanded="true" />
-            <element signature="e#6708#6709#0" expanded="true" />
-            <element signature="method#toString#0;class#DownloadData#0;class#FileAdapter#0" />
-            <element signature="e#9612#9654#1" />
-            <element signature="method#equals#0;class#DownloadData#0;class#FileAdapter#0" />
-          </folding>
+        <state relative-caret-position="190">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/java/net/Socket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="213" column="11" selection-start-line="213" selection-start-column="11" selection-end-line="213" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/Data.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="80" lean-forward="true" selection-start-line="68" selection-end-line="80" />
+        <state relative-caret-position="399">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_setup.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/FileAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="100" column="13" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
+          <folding>
+            <element signature="method#onCreateViewHolder#0;class#FileAdapter#0" />
+            <element signature="e#2078#2165#1" />
+            <element signature="e#2350#2415#1" />
+            <element signature="e#2421#2529#1" />
+            <element signature="e#2587#2663#1" />
+            <element signature="e#2669#2819#1" />
+            <element signature="method#toString#0;class#DownloadData#0;class#FileAdapter#0" />
+            <element signature="method#equals#0;class#DownloadData#0;class#FileAdapter#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/DownloadListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="559">
+          <caret line="248" selection-start-line="248" selection-end-line="248" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_socket.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="32" lean-forward="true" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_ping.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/PingActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="95" column="31" selection-start-line="95" selection-start-column="31" selection-end-line="95" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/SocketActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="116" column="40" selection-start-line="116" selection-start-column="40" selection-end-line="116" selection-end-column="40" />
+          <folding>
+            <element signature="e#1987#2477#0" expanded="true" />
+            <element signature="e#2476#2477#0" expanded="true" />
+            <element signature="e#3704#3705#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="33" column="43" selection-start-line="33" selection-start-column="43" selection-end-line="33" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/xml/provider_paths.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="38" column="47" lean-forward="true" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_experiment_result.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/tonyodev/fetchapp/ExperimentResultActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="127" column="19" selection-start-line="127" selection-start-column="19" selection-end-line="127" selection-end-column="19" />
         </state>
       </provider>
     </entry>

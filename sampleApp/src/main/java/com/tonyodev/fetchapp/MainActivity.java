@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnResult:
                 intent = new Intent(MainActivity.this, ExperimentResultActivity.class);
                 break;
+            case R.id.btnSetup:
+                intent = new Intent(MainActivity.this, SetupActivity.class);
+                break;
             case R.id.btnDelete:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);

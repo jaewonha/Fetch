@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tonyodev.fetch2.AbstractFetchListener;
@@ -113,11 +114,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     private void showExpSummary(String expData){
         DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
 
-        etLog.setText("");
-        etLog.append("*실험결과데이터\n");
-        etLog.append("시작시간:" + downloadInfo.startMs + "\n");
-        etLog.append("종료시간: " + downloadInfo.endMs + "\n");
-        etLog.append("해시 값: " + downloadInfo.hash + "\n");
+        etLog.setText("*실험결과데이터\n" + downloadInfo.toString());
 
         findViewById(R.id.recyclerView).setVisibility(View.GONE);
     }
@@ -155,6 +152,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        fetch.deleteAll();
         fetch.close();
     }
 
@@ -163,7 +161,6 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     public void onBackPressed()
     {
         // code here to show dialog
-        fetch.deleteAll();
         this.finish();
         super.onBackPressed();  // optional depending on your needs
     }
@@ -191,7 +188,12 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     }
     private void enqueueDownloads() {
         //final List<Request> requests = Data.getFetchRequestWithGroupId(GROUP_ID);
-        final List<Request> requests = Data.getFetchSampleWithId((int)(Math.random()*9+0.5));
+        int sampleId = (int)(Math.random()*9+0.5);
+
+        downloadInfo.url = Data.sampleIDs[sampleId];
+        downloadInfo.correctHash = Data.sampleHashs[sampleId];
+
+        final List<Request> requests = Data.getFetchSampleWithUrl(downloadInfo.url);
 
         fetch.enqueue(requests, updatedRequests -> {
 
@@ -222,8 +224,12 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
 
     @Override
     public void onRecord() {
-        Gson gson = new Gson();
-        String json = gson.toJson(downloadInfo);
+        if(downloadInfo.startMs==0) {
+            Toast.makeText(this, "데이터 에러로 저장할 수 없습니다. 다시 다운로드 해 주세요",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String json = new Gson().toJson(downloadInfo);
 
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
@@ -250,6 +256,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         @Override
         public void onStarted(@NotNull Download download, List<? extends DownloadBlock> downloadBlocks, int totalBlocks) {
             downloadInfo.startMs = System.currentTimeMillis();
+
             Log.d(TAG,"started:" + downloadInfo.startMs);
             etLog.append("started:" + downloadInfo.startMs + "\n");
 
@@ -259,6 +266,12 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         @Override
         public void onCompleted(@NotNull Download download) {
             downloadInfo.endMs = System.currentTimeMillis();
+            downloadInfo.size = download.getTotal();
+
+            downloadInfo.durMs = downloadInfo.endMs - downloadInfo.startMs;
+            downloadInfo.bytePerSec = downloadInfo.size / (float) downloadInfo.durMs;
+            downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
+
             Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
             etLog.append("completed:" + downloadInfo.endMs + "\n");
 
@@ -276,6 +289,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
                     try {
                         File file = new File(download.getFile());
                         downloadInfo.hash = generateSHA256(file);
+                        downloadInfo.hashMatched = downloadInfo.hash.compareTo(downloadInfo.correctHash)==0;
                         Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
                         etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
                     } catch (Exception e) {

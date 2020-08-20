@@ -12,15 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stealthcopter.networktools.Ping;
 import com.stealthcopter.networktools.ping.PingResult;
 import com.stealthcopter.networktools.ping.PingStats;
 
+import java.util.Scanner;
+
 
 public class PingActivity extends AppCompatActivity  {
 
-    private final String URL = "5gmec-test.maxstlab.com";
     private final int TEST_CNT = 50;
 
     SharedPreferences sharedpreferences;
@@ -39,16 +41,14 @@ public class PingActivity extends AppCompatActivity  {
         handler = new Handler();
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Ping Test");
+
+        checkExpDone();
     }
 
 
     public void btnClickStart(View v) {
 
         new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -56,20 +56,44 @@ public class PingActivity extends AppCompatActivity  {
                     runPingTest();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    handler.post(()->
+                            Toast.makeText(PingActivity.this, e.getMessage(), Toast.LENGTH_LONG).show()
+                    );
                 }
                 return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void btnClickRecord(View v) {
+        String resultRaw = etFullLog.getText().toString();
 
-    private void runPingTest() throws Exception {
-        Ping.onAddress(URL)
+        String lastLine = null;
+        Scanner scanner = new Scanner(resultRaw);
+        while (scanner.hasNextLine()) {
+            lastLine = scanner.nextLine();
+        }
+
+        sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putString("pingExpResultRaw", resultRaw);
+        editor.putString("pingExpResultSummary", lastLine);
+
+        checkExpDone();
+    }
+
+    private void checkExpDone() {
+        String expData = sharedpreferences.getString("pingExpResultSummary", null);
+        if(expData!=null) {
+            etSummary.setText("*실험결과데이터\n" + expData);
+            findViewById(R.id.llCmd).setVisibility(View.GONE);
+            findViewById(R.id.etFullLog).setVisibility(View.GONE);
+        }
+    }
+
+    private void runPingTest() {
+        Ping.onAddress(Data.IP)
             .setTimes(TEST_CNT)
             .setDelayMillis(500)
             .setTimeOutMillis(1000)

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -25,9 +26,11 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 /*
     · (고정측정) 코엑스 실내외 특정 구간(예시: 파르나스 몰 입구 진입구간, 별마당 도서관, 메가박스 영화관)에서 고정상태 측정
@@ -38,8 +41,7 @@ import java.util.Random;
  */
 public class SocketActivity extends AppCompatActivity  {
 
-    private final String URL = "5gmec-test.maxstlab.com";
-    private final int PORT = 8080;
+    //private final int PORT = 8080;
     private final int TEST_LENGTH = 128;
     private final int TEST_CNT = 1000;
 
@@ -59,6 +61,8 @@ public class SocketActivity extends AppCompatActivity  {
         handler = new Handler();
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Socket Test");
+
+        checkExpDone();
     }
 
 
@@ -66,31 +70,51 @@ public class SocketActivity extends AppCompatActivity  {
 
         new AsyncTask<Void, Void, Void>() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
             protected Void doInBackground(Void... voids) {
                 try {
                     runSocketTest();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    handler.post(()->
+                        Toast.makeText(SocketActivity.this, e.getMessage(), Toast.LENGTH_LONG).show()
+                    );
                 }
                 return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void btnClickRecord(View v) {
+        String resultRaw = etExpResult.getText().toString();
+
+        String lastLine = null;
+        Scanner scanner = new Scanner(resultRaw);
+        while (scanner.hasNextLine()) {
+            lastLine = scanner.nextLine();
+        }
+
+        sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putString("socketExpResultRaw", resultRaw);
+        editor.putString("socketExpResultSummary", lastLine);
+
+        editor.commit();
+
+        checkExpDone();
+    }
+
+    private void checkExpDone() {
+        String expData = sharedpreferences.getString("socketExpResultSummary", null);
+        if(expData!=null) {
+            etExpResult.setText("*실험결과데이터\n" + expData);
+            findViewById(R.id.llCmd).setVisibility(View.GONE);
+        }
+    }
 
     private void runSocketTest() throws IOException {
 
-        Socket socket = new Socket(URL, PORT);
+        Socket socket = new Socket(Data.IP, Data.SOCKET_PORT);
 
         log("init:start\n");
 

@@ -1,9 +1,7 @@
 package com.tonyodev.fetchapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import com.tonyodev.fetch2.Download;
 import com.tonyodev.fetch2.Status;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,12 +76,12 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
         switch (status) {
             case COMPLETED: {
                 //holder.actionButton.setText(R.string.view);
-                holder.actionButton.setText("");
+                holder.actionButton.setText("기록");
                 holder.actionButton.setOnClickListener(view -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        Toast.makeText(context, "Downloaded Path:" + downloadData.download.getFile(), Toast.LENGTH_LONG).show();
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        //Toast.makeText(context, "Downloaded Path:" + downloadData.download.getFile(), Toast.LENGTH_LONG).show();
                         //return;
-                    }
+                    //}
 //                    final File file = new File(downloadData.download.getFile());
 //                    final Uri uri1 = Uri.fromFile(file);
 //                    final Intent share = new Intent(DownloadListActivity.INTENT_RECORD_EXPERIMENT);
@@ -104,7 +101,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             }
             case PAUSED: {
                 //holder.actionButton.setText(R.string.resume);
-                holder.actionButton.setText("Start");
+                holder.actionButton.setText("시작");
                 holder.actionButton.setOnClickListener(view -> {
                     holder.actionButton.setEnabled(false);
                     actionListener.onResumeDownload(downloadData.download.getId());
@@ -113,7 +110,8 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             }
             case DOWNLOADING:
             case QUEUED: {
-                holder.actionButton.setText(R.string.pause);
+                //holder.actionButton.setText(R.string.pause);
+                holder.actionButton.setText("진행중");
                 holder.actionButton.setEnabled(false);
                 holder.actionButton.setOnClickListener(view -> {
                    // holder.actionButton.setEnabled(false);
