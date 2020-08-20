@@ -18,6 +18,8 @@
         android:layout_height="match_parent"
         android:textSize="14sp"
         android:gravity="top"
+        android:inputType="none"
+        android:focusable="false"
         />
 
 </LinearLayout>

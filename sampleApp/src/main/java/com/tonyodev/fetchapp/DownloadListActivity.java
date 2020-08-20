@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +47,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 /*
     · (고정측정) 코엑스 실내외 특정 구간(예시: 파르나스 몰 입구 진입구간, 별마당 도서관, 메가박스 영화관)에서 고정상태 측정
 
@@ -70,6 +74,9 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     private String expTag;
     private DownloadInfo downloadInfo;
     private EditText etLog;
+
+
+    ACProgressFlower dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,7 +280,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
 
             Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
-            etLog.append("completed:" + downloadInfo.endMs + "\n");
+            etLog.append("completed:    " + downloadInfo.endMs + "\n");
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
 
@@ -281,7 +288,13 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
-                    etLog.append("Computing Hash...\n");
+                    //etLog.append("Computing Hash...\n");
+                    dialog = new ACProgressFlower.Builder(DownloadListActivity.this)
+                            .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                            .themeColor(Color.WHITE)
+                            .text("Computing Hash")
+                            .fadeColor(Color.DKGRAY).build();
+                    dialog.show();
                 }
 
                 @Override
@@ -300,7 +313,9 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
+
                     super.onPostExecute(aVoid);
+                    dialog.hide();
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

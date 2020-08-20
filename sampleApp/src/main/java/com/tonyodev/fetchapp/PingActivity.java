@@ -79,7 +79,8 @@ public class PingActivity extends AppCompatActivity  {
 
         editor.putString("pingExpResultRaw", resultRaw);
         editor.putString("pingExpResultSummary", lastLine);
-
+        editor.commit();
+        
         checkExpDone();
     }
 

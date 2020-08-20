@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="다운로드 속도 측정"
+            android:text="다운로드 속도 측정(실외)"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
@@ -24,62 +24,132 @@
             />
 
         <Button
-            android:id="@+id/btnFix1"
-            android:tag="expFix1"
+            android:id="@+id/btnExtFix1"
+            android:tag="expExtFix1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정1(파르나스 입구)"
+            android:text="고정1(삼성역 5출)"
             android:onClick="btnClick"
             />
 
         <Button
-            android:id="@+id/btnFix2"
-            android:tag="expFix2"
+            android:id="@+id/btnExtMove1"
+            android:tag="expExtMove1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정2(별마당 도서관)"
+            android:text="이동1(삼성역5출~봉은사역7출)"
             android:onClick="btnClick"
             />
 
         <Button
-            android:id="@+id/btnFix3"
-            android:tag="expFix3"
+            android:id="@+id/btnExtFix2"
+            android:tag="expExtFix2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="고정3(메가박스 영화관)"
+            android:text="고정2(봉은사역 7출)"
             android:onClick="btnClick"
             />
 
         <Button
-            android:id="@+id/btnMove1"
-            android:tag="expMove1"
+            android:id="@+id/btnExtMove2"
+            android:tag="expExtMove2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동1(파르나스~별마당)"
+            android:text="이동2(봉은사역7출~삼성중앙역5출)"
             android:onClick="btnClick"
             />
 
         <Button
-            android:id="@+id/btnMove2"
-            android:tag="expMove2"
+            android:id="@+id/btnExtFix3"
+            android:tag="expExtFix3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동2(별마당~메가박스)"
+            android:text="고정3(삼성중앙역 5출)"
             android:onClick="btnClick"
             />
 
         <Button
-            android:id="@+id/btnMove3"
-            android:tag="expMove3"
+            android:id="@+id/btnExtMove3"
+            android:tag="expExtMove3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="이동3(메가박스~파르나스)"
+            android:text="이동3(삼성중앙역5출~삼성역5출)"
+            android:onClick="btnClick"
+            />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다운로드 속도 측정(실내)"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <Button
+            android:id="@+id/btnIntFix1"
+            android:tag="expIntFix1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="고정1(별마당도서관)"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnIntMove1"
+            android:tag="expIntMove1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="이동1(별마당~초계국수)"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnIntFix2"
+            android:tag="expIntFix2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="고정2(초계국수 앞)"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnIntMove2"
+            android:tag="expIntMove2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="이동2(초계국수~초계국수)"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnIntFix3"
+            android:tag="expIntFix3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="고정3(알도 매장 앞)"
+            android:onClick="btnClick"
+            />
+
+        <Button
+            android:id="@+id/btnIntMove3"
+            android:tag="expIntMove3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="이동3(초계국수~알도)"
             android:onClick="btnClick"
             />
 

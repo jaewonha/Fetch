@@ -47,6 +47,8 @@
             android:textSize="14sp"
             android:gravity="top"
             android:layout_gravity="top"
+            android:inputType="none"
+            android:focusable="false"
             />
 
 </LinearLayout>

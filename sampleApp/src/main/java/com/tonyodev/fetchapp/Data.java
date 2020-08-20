@@ -23,8 +23,8 @@ public final class Data {
 //            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
     };
 
-    //public static String IP = "3.34.147.254";
-    public static String IP = "10.50.109.101";
+    public static String IP = "3.34.147.254";
+    //public static String IP = "10.50.109.101";
 
     public static int SOCKET_PORT = 8080;
 
@@ -54,7 +54,7 @@ public final class Data {
             "a415cb203ee9249d24426a9780f6846f6902e4a9fc79c631e2f1b4072fdb76b3", // 08.rand
             "029fc5bc9641f49033024803d3a5ae6c3dbc40072922df75ef84e664f7f3b2da"  // 09.rand
     };
-//
+
 //    public static final String[] sampleIDs = new String[]{
 //            URL + "/data/10M/01.rand",
 //            URL + "/data/10M/02.rand",

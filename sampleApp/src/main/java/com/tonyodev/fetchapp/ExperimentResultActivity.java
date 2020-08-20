@@ -148,12 +148,18 @@ public class ExperimentResultActivity extends AppCompatActivity  {
 
     private void loadExpData() {
         String[] expNameList = {
-                "expFix1",
-                "expFix2",
-                "expFix3",
-                "expMove1",
-                "expMove2",
-                "expMove3",
+                "expExtFix1",
+                "expExtFix2",
+                "expExtFix3",
+                "expExtMove1",
+                "expExtMove2",
+                "expExtMove3",
+                "expIntFix1",
+                "expIntFix2",
+                "expIntFix3",
+                "expIntMove1",
+                "expIntMove2",
+                "expIntMove3",
                 "socketExpResultSummary",
                 "pingExpResultSummary"
         };

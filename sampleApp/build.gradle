@@ -59,6 +59,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3'
+    implementation 'cc.cloudist.acplibrary:library:1.2.1'
 
     implementation project(':fetch2okhttp')
     implementation project(':fetch2rx')
