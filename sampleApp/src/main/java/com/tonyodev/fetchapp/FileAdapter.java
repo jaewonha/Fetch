@@ -1,6 +1,7 @@
 package com.tonyodev.fetchapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,7 +52,8 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
         final Status status = downloadData.download.getStatus();
         final Context context = holder.itemView.getContext();
 
-        holder.titleTextView.setText(uri.getLastPathSegment());
+        //holder.titleTextView.setText(uri.getLastPathSegment());
+        holder.titleTextView.setText(uri.toString());
         holder.statusTextView.setText(getStatusString(status));
 
         int progress = downloadData.download.getProgress();
@@ -112,11 +114,33 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             case QUEUED: {
                 //holder.actionButton.setText(R.string.pause);
                 holder.actionButton.setText("진행중");
-                holder.actionButton.setEnabled(false);
+                //holder.actionButton.setEnabled(false);
                 holder.actionButton.setOnClickListener(view -> {
+
+                    new AlertDialog.Builder(context)
+                    .setMessage("다운로드를 중지합니다")
+                    .setPositiveButton(
+                        "중지",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                actionListener.onCancelDownload(downloadData.download.getId());
+
+                            }
+                        })
+                    .setNegativeButton(
+                        "계속",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                    .setCancelable(false)
+                    .create().show();
+
                    // holder.actionButton.setEnabled(false);
-                   // actionListener.onPauseDownload(downloadData.download.getId());
-                    Toast.makeText(context,"Pause is disabled", Toast.LENGTH_SHORT);
+                    //actionListener.onPauseDownload(downloadData.download.getId());
+
+                    //Toast.makeText(context,"Pause is disabled", Toast.LENGTH_SHORT);
                 });
                 break;
             }

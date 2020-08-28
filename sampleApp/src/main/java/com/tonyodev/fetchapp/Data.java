@@ -23,12 +23,15 @@ public final class Data {
 //            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
     };
 
-    public static String IP = "3.34.147.254";
-    //public static String IP = "10.50.109.101";
+    //public static String IP = "3.34.147.254"; //MAXST
+    //public static String IP = "10.50.109.101"; //LG U+
+    public static String IP = "211.246.70.13"; //KT
 
     public static int SOCKET_PORT = 8080;
 
     public static String URL = "http://" + Data.IP;
+
+    public static float LATENCY_GOAL_MS = 1000f/60f;
 
     public static final String[] sampleIDs = new String[]{
             URL + "/data/33mbps_3min/01.rand",
@@ -52,7 +55,8 @@ public final class Data {
             "c92e55cfc0990396abc3bb01c104e29893c2579b2f20150603554d8a3018e87e", // 06.rand
             "caa2133e41f655d1cdc5f4a4cebef7edbb699379571d4e449fd0c3bfeb87578e", // 07.rand
             "a415cb203ee9249d24426a9780f6846f6902e4a9fc79c631e2f1b4072fdb76b3", // 08.rand
-            "029fc5bc9641f49033024803d3a5ae6c3dbc40072922df75ef84e664f7f3b2da"  // 09.rand
+            "029fc5bc9641f49033024803d3a5ae6c3dbc40072922df75ef84e664f7f3b2da", // 09.rand
+            "95c3138532b2ac80a7c29b3ac0924211e95eb1e87bd1cc951414391f1d21a6ce"  // 10.rand
     };
 
 //    public static final String[] sampleIDs = new String[]{

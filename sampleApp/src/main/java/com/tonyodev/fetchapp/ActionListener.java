@@ -2,6 +2,8 @@ package com.tonyodev.fetchapp;
 
 public interface ActionListener {
 
+    void onCancelDownload(int id);
+
     void onPauseDownload(int id);
 
     void onResumeDownload(int id);

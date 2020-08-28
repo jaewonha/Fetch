@@ -47,8 +47,8 @@ public class SocketActivity extends AppCompatActivity  {
 
     SharedPreferences sharedpreferences;
     EditText etExpResult;
-    private Handler handler;
-
+    Handler handler;
+    float avgMs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,8 @@ public class SocketActivity extends AppCompatActivity  {
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
         editor.putString("socketExpResultRaw", resultRaw);
-        editor.putString("socketExpResultSummary", lastLine);
+        editor.putString("socketExpResultSummary", lastLine +
+                "\n판정:" + ( avgMs < Data.LATENCY_GOAL_MS ? "성공" : "실패"));
 
         editor.commit();
 
@@ -147,7 +148,10 @@ public class SocketActivity extends AppCompatActivity  {
         long endMs = System.currentTimeMillis();
         socket.close();
 
-        log( "\n*Socket Test Result\ncount:" + i + ", total:" + (endMs-startMs) + "ms, avg:" + (endMs-startMs)/(float)i + "ms\n" );
+        avgMs = (endMs-startMs)/(float)i;
+        log( "\n*Socket Test Result\ncount:" + i + ", total:" + (endMs-startMs) + "ms, avg:" + avgMs + "ms\n" +
+                ""
+        );
     }
 
     private void log(String msg) {

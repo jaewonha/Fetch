@@ -174,7 +174,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
 
     private void checkStoragePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, STORAGE_PERMISSION_CODE);
         } else {
             checkExpDone();
         }
@@ -211,6 +211,12 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     @Override
     public void onPauseDownload(int id) {
         fetch.pause(id);
+    }
+
+    @Override
+    public void onCancelDownload(int id) {
+        fetch.cancel(id);
+        this.finish();
     }
 
     @Override
@@ -327,10 +333,13 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
+        //* @param etaInMilliSeconds Estimated time remaining in milliseconds for the download to complete.
+        //* @param downloadedBytesPerSecond Average downloaded bytes per second.
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
-            Log.d(TAG,"progress:" + etaInMilliseconds + "/" + downloadedBytesPerSecond);
-            etLog.append("progress:" + etaInMilliseconds + "/" + downloadedBytesPerSecond + "\n");
+            etLog.append("[progress]" +
+                            "downloaded:" + downloadedBytesPerSecond + ", " +
+                            "remain:" + Math.round(etaInMilliseconds*100f/1000f)/100f + "sec");
             fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 

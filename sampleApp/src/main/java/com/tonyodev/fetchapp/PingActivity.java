@@ -29,6 +29,8 @@ public class PingActivity extends AppCompatActivity  {
     EditText etSummary, etFullLog;
     Handler handler;
 
+    PingStats pingStats;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +80,8 @@ public class PingActivity extends AppCompatActivity  {
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
         editor.putString("pingExpResultRaw", resultRaw);
-        editor.putString("pingExpResultSummary", lastLine);
+        editor.putString("pingExpResultSummary", this.pingStats.toString() +
+                "\n판정:" + ( pingStats.getAverageTimeTaken()/1000.0f < Data.LATENCY_GOAL_MS ? "성공" : "실패"));
         editor.commit();
         
         checkExpDone();
@@ -111,7 +114,8 @@ public class PingActivity extends AppCompatActivity  {
 
                 @Override
                 public void onFinished(PingStats pingStats) {
-                    logAll("\n*PingTestResult\n" + pingStats.toString());
+                    PingActivity.this.pingStats = pingStats;
+                    logAll("\n*PingTestResult\n" + PingActivity.this.pingStats.toString());
                 }
 
                 @Override

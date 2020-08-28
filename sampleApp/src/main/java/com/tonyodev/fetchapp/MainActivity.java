@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,21 +22,38 @@ import com.tonyodev.fetch2fileserver.FetchFileServer;
 import com.tonyodev.fetch2rx.RxFetch;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int STORAGE_PERMISSION_CODE = 50;
+    private static final int REQ_PERMISSION_CODE = 50;
 
     private View mainView;
+    private boolean permissionGranted;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainView = findViewById(R.id.activity_main);
+
+        permissionGranted = false;
+        requestPermission();
+    }
+
+
+    private void requestPermission() {
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, REQ_PERMISSION_CODE);
     }
 
     public void btnClick(View v) {
+        if(!permissionGranted) {
+            Toast.makeText(this, "Permission is not granted", Toast.LENGTH_SHORT).show();
+            requestPermission();
+            return;
+        }
+
         int btnId = v.getId();
 
         Intent intent;
@@ -52,11 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(MainActivity.this, SetupActivity.class);
                 break;
             case R.id.btnDelete:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-                } else {
-                    deleteDownloadedFiles();
-                }
+                deleteDownloadedFiles();
                 return;
             default:
                 intent = new Intent(MainActivity.this, DownloadListActivity.class);
@@ -100,10 +115,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            deleteDownloadedFiles();
+        if (requestCode == REQ_PERMISSION_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                && grantResults[1] == PackageManager.PERMISSION_GRANTED
+        )
+        {
+            permissionGranted =  true;
         } else {
-            Snackbar.make(mainView, R.string.permission_not_enabled, Snackbar.LENGTH_INDEFINITE).show();
+            Toast.makeText(this, "모든 권한을 허용해주세요", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
