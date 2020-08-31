@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Start"
+            android:text="시작"
             android:onClick="btnClickStart"
             android:layout_marginRight="50dp"/>
 
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Record"
+            android:text="결과저장"
             android:onClick="btnClickRecord"/>
 
     </LinearLayout>
