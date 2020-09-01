@@ -1,24 +1,21 @@
 package com.tonyodev.fetchapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.view.View;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.net.Socket;
-import java.util.Arrays;
-import java.util.Random;
 
 
 public class SetupActivity extends AppCompatActivity  {
@@ -29,32 +26,94 @@ public class SetupActivity extends AppCompatActivity  {
 
         ((TextView)findViewById(R.id.tvIPAddr)).setText("IPAddr: " + Data.URL);
 
-        TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        ((TextView)findViewById(R.id.tv5G)).setText("is5G:" + (SetupActivity.isNRConnected(tm) ? "5G" : "not 5G"));
-    }
+        ((TextView)findViewById(R.id.tv5G)).setText("nT:" + getNetworkClass(this));
 
-    static boolean isNRConnected(TelephonyManager telephonyManager) {
-        try {
-            Object obj = Class.forName(telephonyManager.getClass().getName())
-                    .getDeclaredMethod("getServiceState", new Class[0]).invoke(telephonyManager, new Object[0]);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            Method[] methods = Class.forName(obj.getClass().getName()).getDeclaredMethods();
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
 
-            for (Method method : methods) {
-                if (method.getName().equals("getNrStatus") || method.getName().equals("getNrState")) {
-                    method.setAccessible(true);
-                    return ((Integer) method.invoke(obj, new Object[0])).intValue() == 3;
+        NetworkRequest networkRequest = builder.build();
+        connectivityManager.registerNetworkCallback(networkRequest,
+            new ConnectivityManager.NetworkCallback () {
+                @Override
+                public void onAvailable(@NonNull Network network) {
+                    super.onAvailable(network);
+                    Log.e("DBG","onAvailable:" + getNetworkType(SetupActivity.this));
+                    getNetworkType(SetupActivity.this);
+                }
+
+                @Override
+                public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+                    super.onCapabilitiesChanged(network, networkCapabilities);
+                    Log.e("DBG","onCapabilitiesChanged" + getNetworkType(SetupActivity.this));
+                }
+
+                @Override
+                public void onLosing(@NonNull Network network, int maxMsToLive) {
+                    super.onLosing(network, maxMsToLive);
+                    Log.e("DBG","onLosing" + getNetworkType(SetupActivity.this));
+                }
+
+                @Override
+                public void onLost(@NonNull Network network) {
+                    super.onLost(network);
+                    Log.e("DBG","onLost" + getNetworkType(SetupActivity.this));
+                    //getNetworkType(SetupActivity.this);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        );
+    }
+
+
+    public String getNetworkType(Context context){
+        String networkType = null;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                networkType = "WiFi";
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                //networkType = "Mobile";
+                networkType = getNetworkClass(context);
+            }
+        } else {
+            networkType = "Not Connected";
         }
-        return false;
+        return networkType;
     }
 
-    public void loadRealample() {
+    public String getNetworkClass(Context context) {
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        TelephonyManager mTelephonyManager = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+
+        int networkType = mTelephonyManager.getNetworkType();
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "2G";
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "3G";
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "4G";
+            case TelephonyManager.NETWORK_TYPE_NR:
+                return "5G";
+            default:
+                return "Unknown";
+        }
     }
-
-
 }

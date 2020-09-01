@@ -2,12 +2,11 @@ package com.tonyodev.fetchapp;
 
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.tonyodev.fetch2.Priority;
 import com.tonyodev.fetch2.Request;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public final class Data {
             "dc4f7c3e3ce7fd34b439af2344c627b556f8e420ee86218205661cbcc71afa2f", //  07.rand
             "8da8ca3d34dafa7b49fd3d6ff7c08b7699a8654f4b4e26e38fe171b7f18ebe34", //  08.rand
             "bcbcd40ded249060b29e77eeef56137d78a8bb6093b71cbda219d4eb7466cd5b", //  09.rand
-            "d0540b559b8b34a437b8dead1bcf884dbc88aac34fb3202942b13d90358b91b9", //  10.rand
+            "d0540b559b8b34a437b8dead1bcf884dbc88aac34fb3202942b13d90358b91b9" //  10.rand
     };
     
 //    public static final String[] sampleIDs = new String[]{

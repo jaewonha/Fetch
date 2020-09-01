@@ -4,16 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tonyodev.fetch2.Fetch;
@@ -22,7 +17,6 @@ import com.tonyodev.fetch2fileserver.FetchFileServer;
 import com.tonyodev.fetch2rx.RxFetch;
 
 import java.io.File;
-import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, REQ_PERMISSION_CODE);
+        requestPermissions(new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE,
+                //Manifest.permission.ACCESS_NETWORK_STATE,
+        }, REQ_PERMISSION_CODE);
     }
 
     public void btnClick(View v) {
@@ -118,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQ_PERMISSION_CODE && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                //&& grantResults[2] == PackageManager.PERMISSION_GRANTED
         )
         {
             permissionGranted =  true;

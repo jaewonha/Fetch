@@ -151,9 +151,10 @@ class FetchFileServerImpl(context: Context,
             val catalog = fileResourceServerDatabase.getRequestedCatalog()
             val catalogFileResourceInfo = FileResourceInfo()
             catalogFileResourceInfo.id = FileRequest.CATALOG_ID
-            val catalogMap = mutableMapOf<String, String>()
-            catalogMap["data"] = catalog
-            catalogFileResourceInfo.extras = JSONObject(catalogMap).toString()
+            //var catalogMap = mutableMapOf<String, String>()
+            //catalogMap["data"] = catalog
+            //catalogFileResourceInfo.extras = JSONObject(catalogMap).toString()
+            throw RuntimeException("Should not run")
             catalogFileResourceInfo.name = FileRequest.CATALOG_NAME
             catalogFileResourceInfo.file = FileRequest.CATALOG_FILE
             return catalogFileResourceInfo.toFileResource()

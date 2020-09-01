@@ -8,28 +8,25 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tonyodev.fetch2.AbstractFetchListener;
-import com.tonyodev.fetch2.DefaultFetchNotificationManager;
 import com.tonyodev.fetch2.Download;
 import com.tonyodev.fetch2.Error;
 import com.tonyodev.fetch2core.DownloadBlock;
 import com.tonyodev.fetch2core.Downloader;
 import com.tonyodev.fetch2.Fetch;
 import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.NetworkType;
 import com.tonyodev.fetch2.Request;
 import com.tonyodev.fetch2.FetchConfiguration;
 import com.tonyodev.fetch2okhttp.OkHttpDownloader;
@@ -43,8 +40,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,8 +126,9 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     }
 
     private void setUpViews() {
-        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         mainView = findViewById(R.id.activity_main);
+
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         fileAdapter = new FileAdapter(this);
@@ -177,7 +173,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
     }
 
     private void checkStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && false) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, STORAGE_PERMISSION_CODE);
         } else {
             checkExpDone();
@@ -198,18 +194,20 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         enqueueDownloads();
     }
     private void enqueueDownloads() {
+        Log.e("DBG","enqueueDownloads()");
         //final List<Request> requests = Data.getFetchRequestWithGroupId(GROUP_ID);
         int sampleId = (int)(Math.random()*9+0.5);
 
         downloadInfo.url = Data.sampleIDs[sampleId];
         downloadInfo.correctHash = Data.sampleHashs[sampleId];
 
+        Log.e("DBG","enqueueDownloads()" + sampleId + downloadInfo.url);
         final List<Request> requests = Data.getFetchSampleWithUrl(downloadInfo.url);
 
         fetch.enqueue(requests, updatedRequests -> {
 
         });
-        fetch.pauseAll();
+        //fetch.pauseAll();
     }
 
     @Override
