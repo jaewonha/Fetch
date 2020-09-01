@@ -43,8 +43,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
@@ -271,7 +275,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             downloadInfo.startMs = System.currentTimeMillis();
 
             Log.d(TAG,"started:" + downloadInfo.startMs);
-            etLog.append("started:" + downloadInfo.startMs + "\n");
+            etLog.append("[" + msToDate(downloadInfo.startMs) + "]:Started\n");
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
@@ -286,7 +290,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
 
             Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
-            etLog.append("completed:    " + downloadInfo.endMs + "\n");
+            etLog.append("[" + msToDate(downloadInfo.endMs) + "]:Completed\n");
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
 
@@ -337,9 +341,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         //* @param downloadedBytesPerSecond Average downloaded bytes per second.
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
-            etLog.append("[progress]" +
-                            "downloaded:" + downloadedBytesPerSecond + ", " +
-                            "remain:" + Math.round(etaInMilliseconds*100f/1000f)/100f + "sec");
+            etLog.append("[" + getDate() + "]:" + downloadedBytesPerSecond +"\n");
             fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 
@@ -410,5 +412,14 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             throw new Exception(
                     "Could not generate hash from file", ex);
         }
+    }
+
+
+    private String getDate() {
+        return new SimpleDateFormat("HH:mm:ss").format(new Date());
+    }
+
+    private String msToDate(long millis) {
+        return new SimpleDateFormat("HH:mm:ss").format(new Date(millis));
     }
 }
