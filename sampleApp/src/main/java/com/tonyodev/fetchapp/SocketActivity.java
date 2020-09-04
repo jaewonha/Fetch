@@ -61,7 +61,7 @@ public class SocketActivity extends AppCompatActivity  {
         handler = new Handler();
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Socket Test");
-
+        ((TextView)findViewById(R.id.tvTargetAddr)).setText(Data.IP + ":" + Data.SOCKET_PORT);
         checkExpDone();
     }
 

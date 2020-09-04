@@ -7,8 +7,13 @@ import android.support.annotation.NonNull;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class Utils {
 
@@ -103,6 +108,57 @@ public final class Utils {
             return 100;
         } else {
             return (int) (((double) downloaded / (double) total) * 100);
+        }
+    }
+
+    public static String getDate() {
+        return new SimpleDateFormat("HH:mm:ss").format(new Date());
+    }
+
+    public static String msToDate(long millis) {
+        return new SimpleDateFormat("HH:mm:ss").format(new Date(millis));
+    }
+
+
+    public static String generateMD5(File file) throws Exception {
+        return hashFile(file, "MD5");
+    }
+
+    public static String generateSHA1(File file) throws Exception {
+        return hashFile(file, "SHA-1");
+    }
+
+    public static String generateSHA256(File file) throws Exception {
+        return hashFile(file, "SHA-256");
+    }
+
+    private static String convertByteArrayToHexString(byte[] arrayBytes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < arrayBytes.length; i++) {
+            stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16)
+                    .substring(1));
+        }
+        return stringBuffer.toString();
+    }
+
+    private static String hashFile(File file, String algorithm)
+            throws Exception {
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+            byte[] bytesBuffer = new byte[1024];
+            int bytesRead = -1;
+
+            while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+                digest.update(bytesBuffer, 0, bytesRead);
+            }
+
+            byte[] hashedBytes = digest.digest();
+
+            return convertByteArrayToHexString(hashedBytes);
+        } catch (NoSuchAlgorithmException | IOException ex) {
+            throw new Exception(
+                    "Could not generate hash from file", ex);
         }
     }
 

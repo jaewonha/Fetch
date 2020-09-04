@@ -61,64 +61,108 @@ import cc.cloudist.acplibrary.ACProgressFlower;
 
    ① (속도측정) 이통3사 MEC 서버에 저장된 속도 측정용 콘텐츠*를 이통사별 단말기 10대**가 동시 접속하여 콘텐츠를 스트리밍 받으면서 5G 네트워크 속도 측정. 영상을 고화질로 재생하기 위한 속도가 일정하게 유지되어야 함
  */
-public class DownloadListActivity extends AppCompatActivity implements ActionListener {
+public class DownloadListActivity extends AppCompatActivity {
 
-    private static final int STORAGE_PERMISSION_CODE = 200;
-    private static final long UNKNOWN_REMAINING_TIME = -1;
-    private static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
-    private static final int GROUP_ID = "listGroup".hashCode();
+    //final vars
+    static final int STORAGE_PERMISSION_CODE = 200;
+    static final long UNKNOWN_REMAINING_TIME = -1;
+    static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
+
     static final String FETCH_NAMESPACE = "DownloadListActivity";
     static final String TAG = "DownloadListActivity";
 
-    private View mainView;
-    private FileAdapter fileAdapter;
-    private Fetch fetch;
-
+    //platform vars
     SharedPreferences sharedpreferences;
-    private String expTag;
-    private DownloadInfo downloadInfo;
-    private EditText etLog;
 
+    //core function vars
+    FileAdapter fileAdapter;
+    Fetch fetch;
 
+    //temp state vars
+    DownloadInfo downloadInfo;
+    String expTag;
+
+    //ui vars
+    View mainView;
     ACProgressFlower dialog;
+    EditText etLog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //setup views
         setContentView(R.layout.activity_download_list);
-        setUpViews();
+        mainView = findViewById(R.id.activity_main);
+
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        fileAdapter = new FileAdapter(fileActionListener);
+        recyclerView.setAdapter(fileAdapter);
+
+        //setup functions
         final FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(this)
                 .setDownloadConcurrentLimit(1)
                 .setHttpDownloader(new OkHttpDownloader(Downloader.FileDownloaderType.SEQUENTIAL))
                 .setNamespace(FETCH_NAMESPACE)
-//                .setNotificationManager(new DefaultFetchNotificationManager(this) {
-//                    @NotNull
-//                    @Override
-//                    public Fetch getFetchInstanceForNamespace(@NotNull String namespace) {
-//                        return fetch;
-//                    }
-//                })
                 .build();
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
 
-
+        //setup vars
         sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
+        downloadInfo = new DownloadInfo();
 
         expTag = getIntent().getStringExtra("expTag");
-        Log.e(TAG,"expTag:" + expTag);
-
-        downloadInfo = new DownloadInfo();
         etLog = findViewById(R.id.etLog);
 
-        checkStoragePermissions();
+        Log.e(TAG,"expTag:" + expTag);
+
+        //check permission
+        if(!MainActivity.hasAllPermissions(this)) {
+            Toast.makeText(this,"필수 권한을 확인해주세요",Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+        updateDownload();
     }
 
-    private void checkExpDone() {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        fetch.removeListener(fetchListener);
+
+        fetch.cancelAll();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fetch.deleteAll();
+        fetch.close();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        //backPressed = true;
+        super.onBackPressed();  // optional depending on your needs
+        this.finish();
+    }
+
+//    public void btnClickStart(View v) {
+//        enqueueDownloads();
+//    }
+
+    private void updateDownload() {
         String expData = sharedpreferences.getString(expTag, null);
         if(expData!=null) {
             showExpSummary(expData);
         } else {
             enqueueDownloads();
+            updateDownloadUI();
         }
     }
 
@@ -130,73 +174,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         findViewById(R.id.recyclerView).setVisibility(View.GONE);
     }
 
-    private void setUpViews() {
-        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        mainView = findViewById(R.id.activity_main);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        fileAdapter = new FileAdapter(this);
-        recyclerView.setAdapter(fileAdapter);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //fetch.getDownloadsInGroup(GROUP_ID, downloads -> {
-        fetch.getDownloads(downloads -> {
-            final ArrayList<Download> list = new ArrayList<>(downloads);
-            Collections.sort(list, (first, second) -> Long.compare(first.getCreated(), second.getCreated()));
-            for (Download download : list) {
-                System.err.println("#### add");
-                fileAdapter.addDownload(download);
-            }
-        }).addListener(fetchListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        fetch.removeListener(fetchListener);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        fetch.deleteAll();
-        fetch.close();
-    }
-
-
-    @Override
-    public void onBackPressed()
-    {
-        // code here to show dialog
-        this.finish();
-        super.onBackPressed();  // optional depending on your needs
-    }
-
-    private void checkStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, STORAGE_PERMISSION_CODE);
-        } else {
-            checkExpDone();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            checkExpDone();
-        } else {
-            Snackbar.make(mainView, R.string.permission_not_enabled, Snackbar.LENGTH_INDEFINITE).show();
-        }
-    }
-
-    public void btnClickStart(View v) {
-        enqueueDownloads();
-    }
     private void enqueueDownloads() {
         //final List<Request> requests = Data.getFetchRequestWithGroupId(GROUP_ID);
         int sampleId = (int)(Math.random()*9+0.5);
@@ -212,53 +190,69 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         fetch.pauseAll();
     }
 
-    @Override
-    public void onPauseDownload(int id) {
-        fetch.pause(id);
+    private void updateDownloadUI() {
+        //fetch.getDownloadsInGroup(GROUP_ID, downloads -> {
+        fetch.getDownloads(downloads -> {
+            final ArrayList<Download> list = new ArrayList<>(downloads);
+            Collections.sort(list, (first, second) -> Long.compare(first.getCreated(), second.getCreated()));
+            for (Download download : list) {
+                System.err.println("#### add");
+                fileAdapter.addDownload(download);
+            }
+        }).addListener(fetchListener);
     }
 
-    @Override
-    public void onCancelDownload(int id) {
-        fetch.cancel(id);
-        this.finish();
-    }
-
-    @Override
-    public void onResumeDownload(int id) {
-        fetch.resume(id);
-    }
-
-    @Override
-    public void onRemoveDownload(int id) {
-        fetch.remove(id);
-    }
-
-    @Override
-    public void onRetryDownload(int id) {
-        fetch.retry(id);
-    }
-
-
-    @Override
-    public void onRecord() {
-        if(downloadInfo.startMs==0) {
-            Toast.makeText(this, "데이터 에러로 저장할 수 없습니다. 다시 다운로드 해 주세요",
-                    Toast.LENGTH_SHORT).show();
-            return;
+    final ActionListener fileActionListener = new ActionListener() {
+        @Override
+        public void onPauseDownload(int id) {
+            fetch.pause(id);
         }
-        String json = new Gson().toJson(downloadInfo);
 
-        SharedPreferences.Editor editor = sharedpreferences.edit();
+        @Override
+        public void onCancelDownload(int id) {
+            fetch.cancel(id);
+            DownloadListActivity.this.finish();
+        }
 
-        Log.e(TAG,"recordResult:" + expTag + "/" + json);
-        editor.putString(expTag, json);
-        editor.commit();
+        @Override
+        public void onResumeDownload(int id) {
+            fetch.resume(id);
+        }
 
-        checkExpDone();
-    }
+        @Override
+        public void onRemoveDownload(int id) {
+            fetch.remove(id);
+        }
+
+        @Override
+        public void onRetryDownload(int id) {
+            fetch.retry(id);
+        }
+
+        @Override
+        public void onRecord() {
+            if(downloadInfo.startMs==0) {
+                Toast.makeText(DownloadListActivity.this,
+                                "데이터 에러로 저장할 수 없습니다. 다시 다운로드 해 주세요",
+                                Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String json = new Gson().toJson(downloadInfo);
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+
+            Log.e(TAG,"recordResult:" + expTag + "/" + json);
+            editor.putString(expTag, json);
+            editor.commit();
+
+            updateDownload();
+        }
+    };
 
 
+    //fetch listener
     private final FetchListener fetchListener = new AbstractFetchListener() {
+
         @Override
         public void onAdded(@NotNull Download download) {
             fileAdapter.addDownload(download);
@@ -275,7 +269,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             downloadInfo.startMs = System.currentTimeMillis();
 
             Log.d(TAG,"started:" + downloadInfo.startMs);
-            etLog.append("[" + msToDate(downloadInfo.startMs) + "]:Started\n");
+            etLog.append("[" + Utils.msToDate(downloadInfo.startMs) + "]:Started\n");
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
@@ -290,7 +284,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
             downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
 
             Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
-            etLog.append("[" + msToDate(downloadInfo.endMs) + "]:Completed\n");
+            etLog.append("[" + Utils.msToDate(downloadInfo.endMs) + "]:Completed\n");
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
 
@@ -311,7 +305,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
                 protected Void doInBackground(Void... voids) {
                     try {
                         File file = new File(download.getFile());
-                        downloadInfo.hash = generateSHA256(file);
+                        downloadInfo.hash = Utils.generateSHA256(file);
                         downloadInfo.hashMatched = downloadInfo.hash.compareTo(downloadInfo.correctHash)==0;
                         Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
                         etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
@@ -341,7 +335,7 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         //* @param downloadedBytesPerSecond Average downloaded bytes per second.
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
-            etLog.append("[" + getDate() + "]:" + downloadedBytesPerSecond +"\n");
+            etLog.append("[" + Utils.getDate() + "]:" + downloadedBytesPerSecond +"\n");
             fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 
@@ -371,55 +365,4 @@ public class DownloadListActivity extends AppCompatActivity implements ActionLis
         }
     };
 
-
-    public static String generateMD5(File file) throws Exception {
-        return hashFile(file, "MD5");
-    }
-
-    public static String generateSHA1(File file) throws Exception {
-        return hashFile(file, "SHA-1");
-    }
-
-    public static String generateSHA256(File file) throws Exception {
-        return hashFile(file, "SHA-256");
-    }
-
-    private static String convertByteArrayToHexString(byte[] arrayBytes) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < arrayBytes.length; i++) {
-            stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16)
-                    .substring(1));
-        }
-        return stringBuffer.toString();
-    }
-
-    private static String hashFile(File file, String algorithm)
-            throws Exception {
-        try (FileInputStream inputStream = new FileInputStream(file)) {
-            MessageDigest digest = MessageDigest.getInstance(algorithm);
-
-            byte[] bytesBuffer = new byte[1024];
-            int bytesRead = -1;
-
-            while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
-                digest.update(bytesBuffer, 0, bytesRead);
-            }
-
-            byte[] hashedBytes = digest.digest();
-
-            return convertByteArrayToHexString(hashedBytes);
-        } catch (NoSuchAlgorithmException | IOException ex) {
-            throw new Exception(
-                    "Could not generate hash from file", ex);
-        }
-    }
-
-
-    private String getDate() {
-        return new SimpleDateFormat("HH:mm:ss").format(new Date());
-    }
-
-    private String msToDate(long millis) {
-        return new SimpleDateFormat("HH:mm:ss").format(new Date(millis));
-    }
 }

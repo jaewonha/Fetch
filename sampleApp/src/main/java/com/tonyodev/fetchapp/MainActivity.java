@@ -1,6 +1,7 @@
 package com.tonyodev.fetchapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,10 +28,10 @@ import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQ_PERMISSION_CODE = 50;
-
-    private View mainView;
-    private boolean permissionGranted;
+    static final int REQ_PERMISSION_CODE = 50;
+    static final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+    View mainView;
+    boolean permissionGranted;
 
 
     @Override
@@ -37,20 +39,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainView = findViewById(R.id.activity_main);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         permissionGranted = false;
+        //Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_10M);
+        Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_90mbps);
+        //Data.init(Data.ModeServer.KT, Data.ModeBitStream.BS_10M);
+        //Data.init(Data.ModeServer.LG, Data.ModeBitStream.BS_90mbps);
         requestPermission();
     }
 
+    public static boolean hasAllPermissions(Context ctx) {
+        for(String permission : permissions) {
+            if(ctx.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) return false;
+        }
+        return true;
+    }
+    public  void requestPermission() {
+        if(MainActivity.hasAllPermissions(this)==false)
+            requestPermissions(permissions, REQ_PERMISSION_CODE);
+        else
+            processPermissionGranted();
+    }
 
-    private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, REQ_PERMISSION_CODE);
+    private void processPermissionGranted() {
+        permissionGranted =  true;
     }
 
     public void btnClick(View v) {
         if(!permissionGranted) {
             Toast.makeText(this, "Permission is not granted", Toast.LENGTH_SHORT).show();
             requestPermission();
+            return;
+        }
+
+        if(!Data.isInitialized()) {
+            Toast.makeText(this, "서버데이터가 초기화되지 않았습니다.", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
@@ -85,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
     private void deleteDownloadedFiles() {
         final String[] namespaces = new String[]{
                 DownloadListActivity.FETCH_NAMESPACE,
-                FailedMultiEnqueueActivity.FETCH_NAMESPACE,
-                FileServerActivity.FETCH_NAMESPACE};
+//                FailedMultiEnqueueActivity.FETCH_NAMESPACE,
+//                FileServerActivity.FETCH_NAMESPACE
+        };
         for (String namespace : namespaces) {
             final FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(this).setNamespace(namespace).build();
             Fetch.Impl.getInstance(fetchConfiguration).deleteAll().close();
@@ -96,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         rxFetch.deleteAll();
         rxFetch.close();
         new FetchFileServer.Builder(this)
-                .setFileServerDatabaseName(FileServerActivity.FETCH_NAMESPACE)
+//                .setFileServerDatabaseName(FileServerActivity.FETCH_NAMESPACE)
                 .setClearDatabaseOnShutdown(true)
                 .build()
                 .shutDown(false);
@@ -120,8 +150,10 @@ public class MainActivity extends AppCompatActivity {
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED
         )
         {
-            permissionGranted =  true;
+            processPermissionGranted();
         } else {
+            Log.e("Permission","grantResults[0]:" + grantResults[0]);
+            Log.e("Permission","grantResults[1]:" + grantResults[1]);
             Toast.makeText(this, "모든 권한을 허용해주세요", Toast.LENGTH_SHORT).show();
         }
     }

@@ -43,6 +43,7 @@ public class PingActivity extends AppCompatActivity  {
         handler = new Handler();
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Ping Test");
+        ((TextView)findViewById(R.id.tvTargetAddr)).setText(Data.IP);
 
         checkExpDone();
     }
