@@ -29,7 +29,12 @@ import java.lang.reflect.Method;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQ_PERMISSION_CODE = 50;
-    static final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE};
+    static final String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
     View mainView;
     boolean permissionGranted;
 
@@ -46,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         permissionGranted = false;
-        //Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_10M);
-        Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_90mbps);
+
+        Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_10M);
+        //Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_90mbps);
         //Data.init(Data.ModeServer.KT, Data.ModeBitStream.BS_10M);
         //Data.init(Data.ModeServer.LG, Data.ModeBitStream.BS_90mbps);
         requestPermission();
@@ -148,12 +154,17 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQ_PERMISSION_CODE && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                && grantResults[3] == PackageManager.PERMISSION_GRANTED
         )
         {
             processPermissionGranted();
         } else {
             Log.e("Permission","grantResults[0]:" + grantResults[0]);
             Log.e("Permission","grantResults[1]:" + grantResults[1]);
+            Log.e("Permission","grantResults[1]:" + grantResults[2]);
+            Log.e("Permission","grantResults[1]:" + grantResults[3]);
             Toast.makeText(this, "모든 권한을 허용해주세요", Toast.LENGTH_SHORT).show();
         }
     }

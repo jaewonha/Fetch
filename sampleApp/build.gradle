@@ -53,6 +53,7 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
     implementation "com.android.support:design:$android_support_version"
     implementation "com.android.support:recyclerview-v7:$android_support_version"
+    implementation "com.google.android.gms:play-services-location:15.0.0"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid2_version"
     implementation "io.reactivex.rxjava2:rxjava:$rxJava2_version"
@@ -60,6 +61,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.stealthcopter:AndroidNetworkTools:0.4.5.3'
     implementation 'cc.cloudist.acplibrary:library:1.2.1'
+    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
 
     implementation project(':fetch2okhttp')
     implementation project(':fetch2rx')

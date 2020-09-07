@@ -43,12 +43,14 @@ public class SocketActivity extends AppCompatActivity  {
 
     //private final int PORT = 8080;
     private final int TEST_LENGTH = 128;
-    private final int TEST_CNT = 1000;
+    private final int TEST_CNT = 100;
+    //private final int TEST_CNT = 1000;
 
     SharedPreferences sharedpreferences;
     EditText etExpResult;
     Handler handler;
     float avgMs;
+    LatencyInfo latencyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +89,17 @@ public class SocketActivity extends AppCompatActivity  {
     public void btnClickRecord(View v) {
         String resultRaw = etExpResult.getText().toString();
 
-        String lastLine = null;
-        Scanner scanner = new Scanner(resultRaw);
-        while (scanner.hasNextLine()) {
-            lastLine = scanner.nextLine();
-        }
+//        String lastLine = null;
+//        Scanner scanner = new Scanner(resultRaw);
+//        while (scanner.hasNextLine()) {
+//            lastLine = scanner.nextLine();
+//        }
 
         sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
         editor.putString("socketExpResultRaw", resultRaw);
-        editor.putString("socketExpResultSummary", lastLine +
-                "\n판정:" + ( avgMs < Data.LATENCY_GOAL_MS ? "성공" : "실패"));
+        editor.putString("socketExpResult", new Gson().toJson(latencyInfo));
 
         editor.commit();
 
@@ -106,9 +107,10 @@ public class SocketActivity extends AppCompatActivity  {
     }
 
     private void checkExpDone() {
-        String expData = sharedpreferences.getString("socketExpResultSummary", null);
+        String expData = sharedpreferences.getString("socketExpResult", null);
         if(expData!=null) {
-            etExpResult.setText("*실험결과데이터\n" + expData);
+            latencyInfo = new Gson().fromJson(expData, LatencyInfo.class);
+            etExpResult.setText("*소켓 응답속도 실험결과:\n" + latencyInfo.statsWithJudge(true));
             findViewById(R.id.llCmd).setVisibility(View.GONE);
         }
     }
@@ -117,21 +119,23 @@ public class SocketActivity extends AppCompatActivity  {
 
         Socket socket = new Socket(Data.IP, Data.SOCKET_PORT);
 
-        log("init:start\n");
+        log("초기화:시작\n");
 
         OutputStream out = socket.getOutputStream();
         InputStream in = socket.getInputStream();
 
-        log("init:end\n");
+        log("초기화:완료\n");
 
 
         Random random = new Random();
         byte[] send = new byte[TEST_LENGTH];
         byte[] recv = new byte[TEST_LENGTH];
 
+        float minMs = 99999999f, maxMs=-1f;
         long startMs = System.currentTimeMillis();
-        int i=0;
+        int i=0, ok = 0, fail = 0;
         for(; i<TEST_CNT; i++) {
+            long _startMs = System.currentTimeMillis();
             random.nextBytes(send);
 
             out.write(send);
@@ -139,19 +143,24 @@ public class SocketActivity extends AppCompatActivity  {
             in.read(recv, 0, recv.length);
 
             if(Arrays.equals(send, recv)) {
-                log("Recv["+i+"]:OK\n");
+                log("수신["+(i+1)+"]:OK\n"); ++ok;
             } else {
-                log("Recv["+i+"]:Fail(send:" + new String(send) + "/recv:" + new String(recv) + ")\n" );
+                log("수신["+(i+1)+"]:Fail(send:" + new String(send) + "/recv:" + new String(recv) + ")\n" ); ++fail;
                 break;
             }
+            long _endMs = System.currentTimeMillis();
+
+            long _durMs = _endMs - _startMs;
+            if(_durMs < minMs) minMs = _durMs;
+            if(_durMs > maxMs) maxMs = _durMs;
         }
         long endMs = System.currentTimeMillis();
         socket.close();
 
         avgMs = (endMs-startMs)/(float)i;
-        log( "\n*Socket Test Result\ncount:" + i + ", total:" + (endMs-startMs) + "ms, avg:" + avgMs + "ms\n" +
-                ""
-        );
+        latencyInfo = new LatencyInfo("Socket", i, ok, fail, avgMs, minMs, maxMs);
+
+        log( "\n" + latencyInfo.toString());
     }
 
     private void log(String msg) {

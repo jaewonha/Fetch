@@ -9,11 +9,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.stealthcopter.networktools.Ping;
 import com.stealthcopter.networktools.ping.PingResult;
 import com.stealthcopter.networktools.ping.PingStats;
@@ -23,13 +25,16 @@ import java.util.Scanner;
 
 public class PingActivity extends AppCompatActivity  {
 
-    private final int TEST_CNT = 50;
+    private final int TEST_CNT = 10;
+    //private final int TEST_CNT = 50;
+    //private final int TEST_CNT = 1000;
 
     SharedPreferences sharedpreferences;
     EditText etSummary, etFullLog;
     Handler handler;
 
-    PingStats pingStats;
+    //PingStats pingStats;
+    LatencyInfo latencyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +76,23 @@ public class PingActivity extends AppCompatActivity  {
     public void btnClickRecord(View v) {
         String resultRaw = etFullLog.getText().toString();
 
-        String lastLine = null;
-        Scanner scanner = new Scanner(resultRaw);
-        while (scanner.hasNextLine()) {
-            lastLine = scanner.nextLine();
-        }
-
         sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
+        Log.d("DBG", "pingStats.getAverageTimeTaken():" + latencyInfo.avg); //ms
+        //Log.d("DBG", "pingStats.getAverageTimeTakenMillis():" + pingStats.getAverageTimeTakenMillis()); //bug
         editor.putString("pingExpResultRaw", resultRaw);
-        editor.putString("pingExpResultSummary", this.pingStats.toString() +
-                "\n판정:" + ( pingStats.getAverageTimeTaken()/1000.0f < Data.LATENCY_GOAL_MS ? "성공" : "실패"));
+        editor.putString("pingExpResult", new Gson().toJson(latencyInfo));
         editor.commit();
         
         checkExpDone();
     }
 
     private void checkExpDone() {
-        String expData = sharedpreferences.getString("pingExpResultSummary", null);
+        String expData = sharedpreferences.getString("pingExpResult", null);
         if(expData!=null) {
-            etSummary.setText("*실험결과데이터\n" + expData);
+            latencyInfo = new Gson().fromJson(expData, LatencyInfo.class);
+            etSummary.setText("*핑 응답속도 실험결과\n" + latencyInfo.statsWithJudge(true));
             findViewById(R.id.llCmd).setVisibility(View.GONE);
             findViewById(R.id.etFullLog).setVisibility(View.GONE);
         }
@@ -115,8 +116,12 @@ public class PingActivity extends AppCompatActivity  {
 
                 @Override
                 public void onFinished(PingStats pingStats) {
-                    PingActivity.this.pingStats = pingStats;
-                    logAll("\n*PingTestResult\n" + PingActivity.this.pingStats.toString());
+                    //PingActivity.this.pingStats = pingStats;
+                    latencyInfo = new LatencyInfo("Ping",
+                            TEST_CNT, (int)pingStats.getNoPings(), (int)pingStats.getPacketsLost(),
+                            pingStats.getAverageTimeTaken(), pingStats.getMinTimeTaken(), pingStats.getMaxTimeTaken() );
+                    //logAll("\n*PingTestResult\n" + PingActivity.this.pingStats.toString());
+                    logAll(latencyInfo.toString());
                 }
 
                 @Override

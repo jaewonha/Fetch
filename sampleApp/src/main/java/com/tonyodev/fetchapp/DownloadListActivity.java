@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.tonyodev.fetch2.AbstractFetchListener;
 import com.tonyodev.fetch2.DefaultFetchNotificationManager;
@@ -67,26 +77,31 @@ public class DownloadListActivity extends AppCompatActivity {
     static final int STORAGE_PERMISSION_CODE = 200;
     static final long UNKNOWN_REMAINING_TIME = -1;
     static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
+    //static final long GPS_SAVE_PERIOD_MS =  1;
+    static final long GPS_SAVE_PERIOD_MS =  60*1000;
 
     static final String FETCH_NAMESPACE = "DownloadListActivity";
     static final String TAG = "DownloadListActivity";
 
     //platform vars
     SharedPreferences sharedpreferences;
+    FusedLocationProviderClient fusedLocationClient;
 
     //core function vars
     FileAdapter fileAdapter;
     Fetch fetch;
 
     //temp state vars
-    DownloadInfo downloadInfo;
     String expTag;
+    DownloadInfo downloadInfo;
+    GPSData lastGPSLocation;
+    //ArrayList<GPSData> gpsDataList;
+
 
     //ui vars
     View mainView;
     ACProgressFlower dialog;
     EditText etLog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +126,7 @@ public class DownloadListActivity extends AppCompatActivity {
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
 
         //setup vars
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
         downloadInfo = new DownloadInfo();
 
@@ -126,6 +142,53 @@ public class DownloadListActivity extends AppCompatActivity {
         }
 
         updateDownload();
+    }
+
+    public void onLocationChanged(Location location) {
+        String msg = "Updated Location: " + (location.getLatitude()) + "," + (location.getLongitude());
+        Log.e("DBG", "LocChange:" + msg);   //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+        lastGPSLocation = new GPSData(System.currentTimeMillis(), location.getLatitude(), location.getLongitude());
+    }
+
+    void waitLocationUpdates() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                dialog = new ACProgressFlower.Builder(DownloadListActivity.this)
+                        //.direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                        .themeColor(Color.WHITE)
+                        .text("GPS 초기화 중입니다..")
+                        .fadeColor(Color.DKGRAY).build();
+                dialog.show();
+
+                lastGPSLocation = null;
+            }
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    while(lastGPSLocation==null)
+                        Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                Toast.makeText(DownloadListActivity.this,
+                    "GPS 수신완료:" + lastGPSLocation.latitude + "/" + lastGPSLocation.longitude,
+                    Toast.LENGTH_SHORT)
+                    .show();
+
+                dialog.hide();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -161,6 +224,9 @@ public class DownloadListActivity extends AppCompatActivity {
         if(expData!=null) {
             showExpSummary(expData);
         } else {
+            startLocationUpdates();
+            waitLocationUpdates();
+
             enqueueDownloads();
             updateDownloadUI();
         }
@@ -169,7 +235,7 @@ public class DownloadListActivity extends AppCompatActivity {
     private void showExpSummary(String expData){
         DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
 
-        etLog.setText("*실험결과데이터\n" + downloadInfo.toString());
+        etLog.setText("*다운로드 테스트 결과\n" + downloadInfo.toString());
 
         findViewById(R.id.recyclerView).setVisibility(View.GONE);
     }
@@ -202,6 +268,7 @@ public class DownloadListActivity extends AppCompatActivity {
         }).addListener(fetchListener);
     }
 
+    //download ui listener
     final ActionListener fileActionListener = new ActionListener() {
         @Override
         public void onPauseDownload(int id) {
@@ -250,7 +317,7 @@ public class DownloadListActivity extends AppCompatActivity {
     };
 
 
-    //fetch listener
+    //fetch downloader listener
     private final FetchListener fetchListener = new AbstractFetchListener() {
 
         @Override
@@ -269,9 +336,31 @@ public class DownloadListActivity extends AppCompatActivity {
             downloadInfo.startMs = System.currentTimeMillis();
 
             Log.d(TAG,"started:" + downloadInfo.startMs);
-            etLog.append("[" + Utils.msToDate(downloadInfo.startMs) + "]:Started\n");
+            etLog.append("[" + Utils.msToDate(downloadInfo.startMs) + "]:Started\n"); //+gps
+
+            downloadInfo.gpsDataList.clear();
+            downloadInfo.gpsDataList.add(new GPSData(downloadInfo.startMs, lastGPSLocation.latitude, lastGPSLocation.longitude));
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
+        }
+
+        //* @param etaInMilliSeconds Estimated time remaining in milliseconds for the download to complete.
+        //* @param downloadedBytesPerSecond Average downloaded bytes per second.
+        @Override
+        public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
+            etLog.append("[" + Utils.getDate() + "]:" +
+                    byteToMB(download.getDownloaded()) + "/" + byteToMB(download.getTotal()) + "MB, "
+                    + byteToMB(downloadedBytesPerSecond) + "MB/s\n");
+
+            long curMs = System.currentTimeMillis();
+            if( (curMs - downloadInfo.gpsDataList.get(downloadInfo.gpsDataList.size()-1).ts) >= GPS_SAVE_PERIOD_MS )
+                downloadInfo.gpsDataList.add(new GPSData(curMs, lastGPSLocation.latitude, lastGPSLocation.longitude));
+
+            fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
+        }
+
+        float byteToMB(long bytes) {
+            return Math.round(bytes/(1000f*1000f)*100)/100f;
         }
 
         @Override
@@ -284,7 +373,8 @@ public class DownloadListActivity extends AppCompatActivity {
             downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
 
             Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
-            etLog.append("[" + Utils.msToDate(downloadInfo.endMs) + "]:Completed\n");
+            etLog.append("[" + Utils.msToDate(downloadInfo.endMs) + "]:Completed\n"); //+gps
+            downloadInfo.gpsDataList.add(new GPSData(downloadInfo.endMs, lastGPSLocation.latitude, lastGPSLocation.longitude));
 
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
 
@@ -308,7 +398,6 @@ public class DownloadListActivity extends AppCompatActivity {
                         downloadInfo.hash = Utils.generateSHA256(file);
                         downloadInfo.hashMatched = downloadInfo.hash.compareTo(downloadInfo.correctHash)==0;
                         Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
-                        etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -317,8 +406,9 @@ public class DownloadListActivity extends AppCompatActivity {
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
-
                     super.onPostExecute(aVoid);
+
+                    etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
                     dialog.hide();
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -329,14 +419,6 @@ public class DownloadListActivity extends AppCompatActivity {
         public void onError(@NotNull Download download, @NotNull Error error, @Nullable Throwable throwable) {
             super.onError(download, error, throwable);
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
-        }
-
-        //* @param etaInMilliSeconds Estimated time remaining in milliseconds for the download to complete.
-        //* @param downloadedBytesPerSecond Average downloaded bytes per second.
-        @Override
-        public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
-            etLog.append("[" + Utils.getDate() + "]:" + downloadedBytesPerSecond +"\n");
-            fileAdapter.update(download, etaInMilliseconds, downloadedBytesPerSecond);
         }
 
         @Override
@@ -365,4 +447,40 @@ public class DownloadListActivity extends AppCompatActivity {
         }
     };
 
+
+    //location
+    private LocationRequest mLocationRequest;
+
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
+    // Trigger new location updates at interval
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        fusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
+    }
 }
