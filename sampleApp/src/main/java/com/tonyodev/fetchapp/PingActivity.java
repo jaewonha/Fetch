@@ -35,6 +35,7 @@ public class PingActivity extends AppCompatActivity  {
 
     //PingStats pingStats;
     LatencyInfo latencyInfo;
+    String expName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class PingActivity extends AppCompatActivity  {
         etFullLog = findViewById(R.id.etFullLog);
 
         handler = new Handler();
+        expName = getIntent().getStringExtra("expName");
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Ping Test");
         ((TextView)findViewById(R.id.tvTargetAddr)).setText(Data.IP);
@@ -117,7 +119,7 @@ public class PingActivity extends AppCompatActivity  {
                 @Override
                 public void onFinished(PingStats pingStats) {
                     //PingActivity.this.pingStats = pingStats;
-                    latencyInfo = new LatencyInfo("Ping",
+                    latencyInfo = new LatencyInfo(expName,
                             TEST_CNT, (int)pingStats.getNoPings(), (int)pingStats.getPacketsLost(),
                             pingStats.getAverageTimeTaken(), pingStats.getMinTimeTaken(), pingStats.getMaxTimeTaken() );
                     //logAll("\n*PingTestResult\n" + PingActivity.this.pingStats.toString());

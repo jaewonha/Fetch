@@ -92,7 +92,7 @@ public class DownloadListActivity extends AppCompatActivity {
     Fetch fetch;
 
     //temp state vars
-    String expTag;
+    String expID, expName;
     DownloadInfo downloadInfo;
     GPSData lastGPSLocation;
     //ArrayList<GPSData> gpsDataList;
@@ -117,6 +117,8 @@ public class DownloadListActivity extends AppCompatActivity {
         fileAdapter = new FileAdapter(fileActionListener);
         recyclerView.setAdapter(fileAdapter);
 
+        etLog = findViewById(R.id.etLog);
+
         //setup functions
         final FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(this)
                 .setDownloadConcurrentLimit(1)
@@ -128,12 +130,14 @@ public class DownloadListActivity extends AppCompatActivity {
         //setup vars
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         sharedpreferences = getSharedPreferences(DownloadInfo.PREF_NAME, Context.MODE_PRIVATE);
+
+        expID = getIntent().getStringExtra("expID");
+        expName = getIntent().getStringExtra("expName");
+
         downloadInfo = new DownloadInfo();
+        downloadInfo.name = expName;
 
-        expTag = getIntent().getStringExtra("expTag");
-        etLog = findViewById(R.id.etLog);
-
-        Log.e(TAG,"expTag:" + expTag);
+        Log.e(TAG,"expID:" + expID);
 
         //check permission
         if(!MainActivity.hasAllPermissions(this)) {
@@ -220,7 +224,7 @@ public class DownloadListActivity extends AppCompatActivity {
 //    }
 
     private void updateDownload() {
-        String expData = sharedpreferences.getString(expTag, null);
+        String expData = sharedpreferences.getString(expID, null);
         if(expData!=null) {
             showExpSummary(expData);
         } else {
@@ -308,8 +312,8 @@ public class DownloadListActivity extends AppCompatActivity {
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
 
-            Log.e(TAG,"recordResult:" + expTag + "/" + json);
-            editor.putString(expTag, json);
+            Log.e(TAG,"recordResult:" + expID + "/" + json);
+            editor.putString(expID, json);
             editor.commit();
 
             updateDownload();

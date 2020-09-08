@@ -78,11 +78,12 @@ import jxl.write.biff.RowsExceededException;
  */
 public class ExperimentResultActivity extends AppCompatActivity  {
 
-    final String TAG = ExperimentResultActivity.class.getSimpleName();
-    private static final int STORAGE_PERMISSION_CODE = 100;
+    String TAG = ExperimentResultActivity.class.getSimpleName();
+    static int STORAGE_PERMISSION_CODE = 100;
 
     SharedPreferences sharedpreferences;
     TextView tvExpResult;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,67 +220,84 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             return file;
     }
 
-    private void loadExpData() {
-        String[] expIDList = {
-                "expExtFix1",
-                "expExtFix2",
-                "expExtFix3",
-                "expExtMove1",
-                "expExtMove2",
-                "expExtMove3",
-                "expIntFix1",
-                "expIntFix2",
-                "expIntFix3",
-                "expIntMove1",
-                "expIntMove2",
-                "expIntMove3",
-                "socketExpResult",
-                "pingExpResult"
-        };
 
-        String[] expDescList = {
-                "고정1(삼성역 5출)",
-                "고정2(봉은사역 7출)",
-                "고정3(삼성중앙역 5출)",
-                "이동1(삼성역5출~봉은사역7출)",
-                "이동2(봉은사역7출~삼성중앙역5출)",
-                "이동3(삼성중앙역5출~삼성역5출)",
-                "고정1(별마당도서관)",
-                "고정2(초계국수 앞)",
-                "고정3(알도 매장 앞)",
-                "이동1(별마당~초계국수)",
-                "이동2(초계국수~초계국수)",
-                "이동3(초계국수~알도)",
-                "소켓 응답속도 측정 결과",
-                "핑 응답속도 측정 결과"
-        };
 
-        for(int i=0; i<expIDList.length; i++) {
-            String expId    = expIDList[i];
-            String expDesc  = expDescList[i];
+    String[] expFileDownIDList = {
+            "expExtFix1",
+            "expExtFix2",
+            "expExtFix3",
+            "expExtMove1",
+            "expExtMove2",
+            "expExtMove3",
+            "expIntFix1",
+            "expIntFix2",
+            "expIntFix3",
+            "expIntMove1",
+            "expIntMove2",
+            "expIntMove3",
 
-            String expData = sharedpreferences.getString(expId, null);
-            System.err.println(expId + ":" + expData);
+    };
 
-            tvExpResult.append("*"  + expDesc + "\n\n");
+    String[] expLatencyIDList = {
+            "socketExpResult",
+            "pingExpResult",
+    };
 
-            if(expData!=null) {
-                if( expId.compareTo("socketExpResult")==0 ||
-                        expId.compareTo("pingExpResult")==0 )
-                {
-                    LatencyInfo latencyInfo = new Gson().fromJson(expData, LatencyInfo.class);
-                    tvExpResult.append(latencyInfo.statsWithJudge(true)+ "\n");
-                } else {
-                    DownloadInfo downloadInfo = new Gson().fromJson(expData, DownloadInfo.class);
-                    tvExpResult.append(downloadInfo.toString() + "\n");
-                }
 
-            } else {
+//        String[] expDescList = {
+//                "고정1(삼성역 5출)",
+//                "고정2(봉은사역 7출)",
+//                "고정3(삼성중앙역 5출)",
+//                "이동1(삼성역5출~봉은사역7출)",
+//                "이동2(봉은사역7출~삼성중앙역5출)",
+//                "이동3(삼성중앙역5출~삼성역5출)",
+//                "고정1(별마당도서관)",
+//                "고정2(초계국수 앞)",
+//                "고정3(알도 매장 앞)",
+//                "이동1(별마당~초계국수)",
+//                "이동2(초계국수~초계국수)",
+//                "이동3(초계국수~알도)",
+//                "소켓 응답속도 측정 결과",
+//                "핑 응답속도 측정 결과"
+//        };
+
+    DownloadInfo getExpFileDownResult(String expFileDownID) {
+        String expData = sharedpreferences.getString(expFileDownID, null);
+        return new Gson().fromJson(expData, DownloadInfo.class);
+    }
+
+    LatencyInfo getExpLatencyResult(String expLatencyID) {
+        String expData = sharedpreferences.getString(expLatencyID, null);
+        return new Gson().fromJson(expData, LatencyInfo.class);
+    }
+
+    void loadExpData() {
+
+        for(String expId : expFileDownIDList) {
+            DownloadInfo expInfo = getExpFileDownResult(expId);
+
+            if(expInfo==null) {
                 tvExpResult.append("None\n\n");
+            } else {
+                tvExpResult.append("*"  + expInfo.name + "\n\n");
+                tvExpResult.append(expInfo.toString() + "\n");
             }
 
-            tvExpResult.append("\n");
         }
+
+        for(String expId : expLatencyIDList) {
+            LatencyInfo expInfo = getExpLatencyResult(expId);
+
+            if(expInfo==null) {
+                tvExpResult.append("None\n\n");
+            } else {
+                tvExpResult.append("*"  + expInfo.name + "\n\n");
+                tvExpResult.append(expInfo.statsWithJudge(true) + "\n");
+            }
+        }
+
+        tvExpResult.append("\n");
+
     }
 
     public WritableWorkbook createWorkbook(File file){

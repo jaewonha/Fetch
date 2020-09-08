@@ -113,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 //intent = new Intent(MainActivity.this, SingleDownloadActivity.class);
         }
 
-        intent.putExtra("expTag", (String)v.getTag());
-        MainActivity.this.startActivity(intent);
+        intent.putExtra("expID", (String)v.getTag());
+        intent.putExtra("expName", ((TextView)v).getText());
+        startActivity(intent);
     }
 
     private void deleteDownloadedFiles() {

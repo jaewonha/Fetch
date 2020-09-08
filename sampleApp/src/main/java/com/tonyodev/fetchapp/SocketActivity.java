@@ -49,6 +49,8 @@ public class SocketActivity extends AppCompatActivity  {
     SharedPreferences sharedpreferences;
     EditText etExpResult;
     Handler handler;
+
+    String expName;
     float avgMs;
     LatencyInfo latencyInfo;
 
@@ -61,6 +63,7 @@ public class SocketActivity extends AppCompatActivity  {
         etExpResult = findViewById(R.id.etExpResult);
 
         handler = new Handler();
+        expName = getIntent().getStringExtra("expName");
 
         ((TextView)findViewById(R.id.tvTitle)).setText("Socket Test");
         ((TextView)findViewById(R.id.tvTargetAddr)).setText(Data.IP + ":" + Data.SOCKET_PORT);
@@ -158,7 +161,7 @@ public class SocketActivity extends AppCompatActivity  {
         socket.close();
 
         avgMs = (endMs-startMs)/(float)i;
-        latencyInfo = new LatencyInfo("Socket", i, ok, fail, avgMs, minMs, maxMs);
+        latencyInfo = new LatencyInfo(expName, i, ok, fail, avgMs, minMs, maxMs);
 
         log( "\n" + latencyInfo.toString());
     }

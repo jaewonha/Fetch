@@ -9,6 +9,7 @@ import java.util.Date;
 public class DownloadInfo {
     public final static String PREF_NAME = "DownloadInfo";
 
+    String name;
     String url, hash, correctHash;
     long startMs, endMs, durMs, size;
     float bytePerSec, _bytePerSec;
