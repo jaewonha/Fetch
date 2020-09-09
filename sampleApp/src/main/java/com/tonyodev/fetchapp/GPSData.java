@@ -9,4 +9,8 @@ public class GPSData {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public String getGPSString() {
+        return latitude + "," + longitude;
+    }
 }

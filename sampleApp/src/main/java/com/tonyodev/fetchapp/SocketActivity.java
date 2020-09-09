@@ -43,8 +43,8 @@ public class SocketActivity extends AppCompatActivity  {
 
     //private final int PORT = 8080;
     private final int TEST_LENGTH = 128;
-    private final int TEST_CNT = 100;
-    //private final int TEST_CNT = 1000;
+    //private final int TEST_CNT = 100;
+    private final int TEST_CNT = 1000;
 
     SharedPreferences sharedpreferences;
     EditText etExpResult;

@@ -25,8 +25,8 @@ import java.util.Scanner;
 
 public class PingActivity extends AppCompatActivity  {
 
-    private final int TEST_CNT = 10;
-    //private final int TEST_CNT = 50;
+    //private final int TEST_CNT = 10;
+    private final int TEST_CNT = 50;
     //private final int TEST_CNT = 1000;
 
     SharedPreferences sharedpreferences;

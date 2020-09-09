@@ -74,7 +74,6 @@ import cc.cloudist.acplibrary.ACProgressFlower;
 public class DownloadListActivity extends AppCompatActivity {
 
     //final vars
-    static final int STORAGE_PERMISSION_CODE = 200;
     static final long UNKNOWN_REMAINING_TIME = -1;
     static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
     //static final long GPS_SAVE_PERIOD_MS =  1;
@@ -275,9 +274,7 @@ public class DownloadListActivity extends AppCompatActivity {
     //download ui listener
     final ActionListener fileActionListener = new ActionListener() {
         @Override
-        public void onPauseDownload(int id) {
-            fetch.pause(id);
-        }
+        public void onPauseDownload(int id) { fetch.pause(id); }
 
         @Override
         public void onCancelDownload(int id) {
@@ -286,9 +283,7 @@ public class DownloadListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onResumeDownload(int id) {
-            fetch.resume(id);
-        }
+        public void onResumeDownload(int id) { fetch.resume(id); }
 
         @Override
         public void onRemoveDownload(int id) {
@@ -297,6 +292,7 @@ public class DownloadListActivity extends AppCompatActivity {
 
         @Override
         public void onRetryDownload(int id) {
+
             fetch.retry(id);
         }
 
@@ -422,31 +418,37 @@ public class DownloadListActivity extends AppCompatActivity {
         @Override
         public void onError(@NotNull Download download, @NotNull Error error, @Nullable Throwable throwable) {
             super.onError(download, error, throwable);
+            Log.e("DBG","Fetch:onError");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onPaused(@NotNull Download download) {
+            Log.e("DBG","Fetch:onPaused");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onResumed(@NotNull Download download) {
+            Log.e("DBG","Fetch:onResumed");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onCancelled(@NotNull Download download) {
+            Log.e("DBG","Fetch:onCancelled");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onRemoved(@NotNull Download download) {
+            Log.e("DBG","Fetch:onRemoved");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         @Override
         public void onDeleted(@NotNull Download download) {
+            Log.e("DBG","Fetch:onDeleted");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
     };

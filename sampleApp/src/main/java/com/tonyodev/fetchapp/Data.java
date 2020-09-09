@@ -17,8 +17,13 @@ public final class Data {
 
     //vars - fixed
     public static int SOCKET_PORT = 8080;
+
+    //public static float DOWNLOAD_GOAL_MS = 1; //test: all fail
     public static float DOWNLOAD_GOAL_MS = 180f*1000;
+
+    //public static float LATENCY_GOAL_MS  = 1000f/240f; //test: maybe all fail
     public static float LATENCY_GOAL_MS  = 1000f/60f;
+
 
     //vars - variable
     public static String IP = null;

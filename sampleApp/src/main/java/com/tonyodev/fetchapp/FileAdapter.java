@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
             holder.downloadedBytesPerSecondTextView.setText(Utils.getDownloadSpeedString(context, downloadData.downloadedBytesPerSecond));
         }
 
+        Log.e("DBG","download Status:" + status);
         switch (status) {
             case COMPLETED: {
                 //holder.actionButton.setText(R.string.view);

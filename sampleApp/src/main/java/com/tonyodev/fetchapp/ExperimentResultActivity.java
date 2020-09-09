@@ -27,21 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.tonyodev.fetch2.AbstractFetchListener;
-import com.tonyodev.fetch2.DefaultFetchNotificationManager;
-import com.tonyodev.fetch2.Download;
-import com.tonyodev.fetch2.Error;
-import com.tonyodev.fetch2.Fetch;
-import com.tonyodev.fetch2.FetchConfiguration;
-import com.tonyodev.fetch2.FetchListener;
-import com.tonyodev.fetch2.Request;
-import com.tonyodev.fetch2core.DownloadBlock;
-import com.tonyodev.fetch2core.Downloader;
-import com.tonyodev.fetch2okhttp.OkHttpDownloader;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -149,32 +135,19 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             public void onClick(DialogInterface dialog, int which) {
                 String expName = input.getText().toString();
 
-
                 Date date = new Date() ;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
 
-                //String fileName = "exp_" + expName + "_" + dateFormat.format(date) + ".txt";
-                String fileName = "exp_" + expName + "_" + dateFormat.format(date) + ".xls";
-
+                String fileName = "exp_" + expName + "_" + dateFormat.format(date);
                 try {
-                    //File file = writeToFile(fileName, expResult);
-                    File file = new File(Environment.getExternalStorageDirectory() + "/" + fileName);
-                    if (!file.exists()) {
-                        file.createNewFile();
-                    }
-
-                    WritableWorkbook wb = createWorkbook(file);
-                    WritableSheet sheet = createSheet(wb, "sheet0", 0);
-
-                    writeCell(0, 0, "test", true, sheet);
-                    writeCell(0, 1, "value", false, sheet);
-                    wb.write();
-                    wb.close();
+                    File txtFile = writeToFile(fileName + ".txt", expResult);
+                    File excelFile = writeToExcelFile(fileName + ".xls");
 
                     Toast.makeText(ExperimentResultActivity.this,
-                            "파일 저장 성공:" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                            "파일 저장 성공:" + excelFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 
-                    openFile(file);
+                    openFile(excelFile);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(ExperimentResultActivity.this,
@@ -221,6 +194,106 @@ public class ExperimentResultActivity extends AppCompatActivity  {
     }
 
 
+    private File writeToExcelFile(String fileName) throws Exception {
+        File excelFile = new File(Environment.getExternalStorageDirectory() + "/" + fileName);
+        if (!excelFile.exists()) {
+            excelFile.createNewFile();
+        }
+
+        //expFileDownIDList
+        //expLatencyIDList
+
+        WritableWorkbook wb = createWorkbook(excelFile);
+
+        //download test sheet
+        WritableSheet downloadTestSheet = createSheet(wb, "다운로드테스트", 0);
+        int c=0;
+        writeCell(c++, 0, "이름", true, downloadTestSheet);
+        writeCell(c++, 0, "URL", true, downloadTestSheet);
+        writeCell(c++, 0, "해시값", true, downloadTestSheet);
+        writeCell(c++, 0, "원본해시값", true, downloadTestSheet);
+        writeCell(c++, 0, "시작시간(ms)", true, downloadTestSheet);
+        writeCell(c++, 0, "종료시간(ms)", true, downloadTestSheet);
+        writeCell(c++, 0, "걸린시간(ms)", true, downloadTestSheet);
+        writeCell(c++, 0, "파일크기(ms)", true, downloadTestSheet);
+        writeCell(c++, 0, "다운로드속도(Byte/s)", true, downloadTestSheet);
+        writeCell(c++, 0, "무결성테스트", true, downloadTestSheet);
+        writeCell(c++, 0, "속도테스트", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(시작)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(종료)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(1분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(2분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(3분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(4분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(5분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(6분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(7분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(8분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(9분)", true, downloadTestSheet);
+        writeCell(c++, 0, "GPS(10분)", true, downloadTestSheet);
+
+        for(int r=1; r<=expFileDownIDList.length; r++) {
+            c=0;
+            DownloadInfo expInfo = getExpFileDownResult(expFileDownIDList[r-1]);
+            if(expInfo==null) {
+                writeCell(c++, r, getExpName(expFileDownIDList[r-1]), false, downloadTestSheet);
+                continue;
+            }
+            writeCell(c++, r, expInfo.name, false, downloadTestSheet);
+            writeCell(c++, r, expInfo.url, false, downloadTestSheet);
+            writeCell(c++, r, expInfo.hash, false, downloadTestSheet);
+            writeCell(c++, r, expInfo.correctHash, false, downloadTestSheet);
+            writeCell(c++, r, ""+expInfo.startMs, false, downloadTestSheet);
+            writeCell(c++, r, ""+expInfo.endMs, false, downloadTestSheet);
+            writeCell(c++, r, ""+expInfo.durMs, false, downloadTestSheet);
+            writeCell(c++, r, ""+expInfo.size, false, downloadTestSheet);
+            writeCell(c++, r, ""+expInfo.bytePerSec, false, downloadTestSheet);
+            writeCell(c++, r, expInfo.passIntegrityTest() ? "PASS" : "FAIL", false, downloadTestSheet);
+            writeCell(c++, r, expInfo.passLatencyTest() ? "PASS" : "FAIL", false, downloadTestSheet);
+            writeCell(c++, r, expInfo.gpsDataList.get(0).getGPSString(), false, downloadTestSheet);
+            writeCell(c++, r, expInfo.gpsDataList.get(expInfo.gpsDataList.size()-1).getGPSString(), false, downloadTestSheet);
+            for(int i=1; i<expInfo.gpsDataList.size()-1 && i<=10; i++) {
+                writeCell(c++, r, expInfo.gpsDataList.get(i).getGPSString(), false, downloadTestSheet);
+            }
+        }
+
+        //latency test sheet
+        WritableSheet latencyTestSheet = createSheet(wb, "응답속도테스트", 1);
+        c=0;
+        writeCell(c++, 0, "이름", true, latencyTestSheet);
+        writeCell(c++, 0, "시도횟수", true, latencyTestSheet);
+        writeCell(c++, 0, "성공횟수", true, latencyTestSheet);
+        writeCell(c++, 0, "실패횟수", true, latencyTestSheet);
+        writeCell(c++, 0, "평균속도(ms)", true, latencyTestSheet);
+        writeCell(c++, 0, "최소속도(ms)", true, latencyTestSheet);
+        writeCell(c++, 0, "최대속도(ms)", true, latencyTestSheet);
+        writeCell(c++, 0, "응답속도테스트", true, latencyTestSheet);
+
+        for(int r=1; r<=expLatencyIDList.length; r++) {
+            c=0;
+            LatencyInfo expInfo = getExpLatencyResult(expLatencyIDList[r-1]);
+            if(expInfo==null) {
+                writeCell(c++, r, getExpName(expLatencyIDList[r-1]), false, latencyTestSheet);
+                continue;
+            }
+            writeCell(c++, r, ""+expInfo.name, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.cnt, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.ok, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.fail, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.min, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.max, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.avg, false, latencyTestSheet);
+            writeCell(c++, r, expInfo.passLatencyTest() ? "PASS" : "FAIL", false, latencyTestSheet);
+        }
+
+        //test
+        //writeCell(0, 0, "test", true, downloadTestSheet);
+        //writeCell(0, 1, "value", false, downloadTestSheet);
+        wb.write();
+        wb.close();
+
+        return excelFile;
+    }
 
     String[] expFileDownIDList = {
             "expExtFix1",
@@ -235,7 +308,6 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             "expIntMove1",
             "expIntMove2",
             "expIntMove3",
-
     };
 
     String[] expLatencyIDList = {
@@ -244,22 +316,25 @@ public class ExperimentResultActivity extends AppCompatActivity  {
     };
 
 
-//        String[] expDescList = {
-//                "고정1(삼성역 5출)",
-//                "고정2(봉은사역 7출)",
-//                "고정3(삼성중앙역 5출)",
-//                "이동1(삼성역5출~봉은사역7출)",
-//                "이동2(봉은사역7출~삼성중앙역5출)",
-//                "이동3(삼성중앙역5출~삼성역5출)",
-//                "고정1(별마당도서관)",
-//                "고정2(초계국수 앞)",
-//                "고정3(알도 매장 앞)",
-//                "이동1(별마당~초계국수)",
-//                "이동2(초계국수~초계국수)",
-//                "이동3(초계국수~알도)",
-//                "소켓 응답속도 측정 결과",
-//                "핑 응답속도 측정 결과"
-//        };
+    String getExpName(String expId) {
+        switch(expId) {
+            case "expExtFix1": return "고정1(삼성역 5출)";
+            case "expExtFix2": return "고정2(봉은사역 7출)";
+            case "expExtFix3": return "고정3(삼성중앙역 5출)";
+            case "expExtMove1": return "이동1(삼성역5출~봉은사역7출)";
+            case "expExtMove2": return "이동2(봉은사역7출~삼성중앙역5출)";
+            case "expExtMove3": return "이동3(삼성중앙역5출~삼성역5출)";
+            case "expIntFix1": return "고정1(별마당도서관)";
+            case "expIntFix2": return "고정2(초계국수 앞)";
+            case "expIntFix3": return "고정3(알도 매장 앞)";
+            case "expIntMove1": return "이동1(별마당~초계국수)";
+            case "expIntMove2": return "이동2(초계국수~초계국수)";
+            case "expIntMove3": return "이동3(초계국수~알도)";
+            case "socketExpResult": return "소켓 응답속도 측정 결과";
+            case "pingExpResult":   return "핑 응답속도 측정 결과";
+            default:                return "None";
+        }
+    }
 
     DownloadInfo getExpFileDownResult(String expFileDownID) {
         String expData = sharedpreferences.getString(expFileDownID, null);
@@ -277,7 +352,9 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             DownloadInfo expInfo = getExpFileDownResult(expId);
 
             if(expInfo==null) {
-                tvExpResult.append("None\n\n");
+
+                tvExpResult.append("*"  + getExpName(expId) + "\n\n");
+                tvExpResult.append("실험결과없음\n\n");
             } else {
                 tvExpResult.append("*"  + expInfo.name + "\n\n");
                 tvExpResult.append(expInfo.toString() + "\n");
@@ -289,15 +366,15 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             LatencyInfo expInfo = getExpLatencyResult(expId);
 
             if(expInfo==null) {
-                tvExpResult.append("None\n\n");
+                tvExpResult.append("*"  + getExpName(expId) + "\n\n");
+                tvExpResult.append("실험결과없음\n\n");
             } else {
                 tvExpResult.append("*"  + expInfo.name + "\n\n");
                 tvExpResult.append(expInfo.statsWithJudge(true) + "\n");
             }
         }
 
-        tvExpResult.append("\n");
-
+        tvExpResult.append("\n\n");
     }
 
     public WritableWorkbook createWorkbook(File file){
