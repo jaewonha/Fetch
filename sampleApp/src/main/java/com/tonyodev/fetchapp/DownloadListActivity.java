@@ -123,8 +123,12 @@ public class DownloadListActivity extends AppCompatActivity {
                 .setDownloadConcurrentLimit(1)
                 .setHttpDownloader(new OkHttpDownloader(Downloader.FileDownloaderType.SEQUENTIAL))
                 .setNamespace(FETCH_NAMESPACE)
+                .enableAutoStart(false)
+                .enableRetryOnNetworkGain(false)
+                .setAutoRetryMaxAttempts(0)
                 .build();
         fetch = Fetch.Impl.getInstance(fetchConfiguration);
+        fetch.deleteAll(); //clear prev downloading incase app closed unexpectedly
 
         //setup vars
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -274,30 +278,39 @@ public class DownloadListActivity extends AppCompatActivity {
     //download ui listener
     final ActionListener fileActionListener = new ActionListener() {
         @Override
-        public void onPauseDownload(int id) { fetch.pause(id); }
+        public void onPauseDownload(int id) {
+            Log.e("DBG","ActionListener:onPauseDownload");
+            fetch.pause(id);
+        }
 
         @Override
         public void onCancelDownload(int id) {
+            Log.e("DBG","ActionListener:onCancelDownload");
             fetch.cancel(id);
             DownloadListActivity.this.finish();
         }
 
         @Override
-        public void onResumeDownload(int id) { fetch.resume(id); }
+        public void onResumeDownload(int id) {
+            Log.e("DBG","ActionListener:onResumeDownload");
+            fetch.resume(id);
+        }
 
         @Override
         public void onRemoveDownload(int id) {
+            Log.e("DBG","ActionListener:onRemoveDownload");
             fetch.remove(id);
         }
 
         @Override
         public void onRetryDownload(int id) {
-
+            Log.e("DBG","ActionListener:onRetryDownload");
             fetch.retry(id);
         }
 
         @Override
         public void onRecord() {
+            Log.e("DBG","ActionListener:onRecord");
             if(downloadInfo.startMs==0) {
                 Toast.makeText(DownloadListActivity.this,
                                 "데이터 에러로 저장할 수 없습니다. 다시 다운로드 해 주세요",
@@ -322,17 +335,20 @@ public class DownloadListActivity extends AppCompatActivity {
 
         @Override
         public void onAdded(@NotNull Download download) {
+            Log.e("DBG","Fetch:onAdded");
             fileAdapter.addDownload(download);
         }
 
         @Override
         public void onQueued(@NotNull Download download, boolean waitingOnNetwork) {
+            Log.e("DBG","Fetch:onQueued");
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
         //fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int)
         @Override
         public void onStarted(@NotNull Download download, List<? extends DownloadBlock> downloadBlocks, int totalBlocks) {
+            Log.e("DBG","Fetch:onStarted");
             downloadInfo.startMs = System.currentTimeMillis();
 
             Log.d(TAG,"started:" + downloadInfo.startMs);
@@ -348,6 +364,7 @@ public class DownloadListActivity extends AppCompatActivity {
         //* @param downloadedBytesPerSecond Average downloaded bytes per second.
         @Override
         public void onProgress(@NotNull Download download, long etaInMilliseconds, long downloadedBytesPerSecond) {
+            Log.e("DBG","Fetch:onProgress");
             etLog.append("[" + Utils.getDate() + "]:" +
                     byteToMB(download.getDownloaded()) + "/" + byteToMB(download.getTotal()) + "MB, "
                     + byteToMB(downloadedBytesPerSecond) + "MB/s\n");
@@ -365,6 +382,7 @@ public class DownloadListActivity extends AppCompatActivity {
 
         @Override
         public void onCompleted(@NotNull Download download) {
+            Log.e("DBG","Fetch:onCompleted");
             downloadInfo.endMs = System.currentTimeMillis();
             downloadInfo.size = download.getTotal();
 

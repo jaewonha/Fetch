@@ -78,6 +78,7 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
 
         Log.e("DBG","download Status:" + status);
         switch (status) {
+            case FAILED:
             case COMPLETED: {
                 //holder.actionButton.setText(R.string.view);
                 holder.actionButton.setText("기록");
@@ -95,14 +96,14 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHold
                 });
                 break;
             }
-            case FAILED: {
-                holder.actionButton.setText(R.string.retry);
-                holder.actionButton.setOnClickListener(view -> {
-                    holder.actionButton.setEnabled(false);
-                    actionListener.onRetryDownload(downloadData.download.getId());
-                });
-                break;
-            }
+//            case FAILED: {
+//                holder.actionButton.setText(R.string.retry);
+//                holder.actionButton.setOnClickListener(view -> {
+//                    holder.actionButton.setEnabled(false);
+//                    actionListener.onRetryDownload(downloadData.download.getId());
+//                });
+//                break;
+//            }
             case PAUSED: {
                 //holder.actionButton.setText(R.string.resume);
                 holder.actionButton.setText("시작");
