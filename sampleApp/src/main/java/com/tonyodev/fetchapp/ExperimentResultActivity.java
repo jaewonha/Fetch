@@ -280,9 +280,9 @@ public class ExperimentResultActivity extends AppCompatActivity  {
             writeCell(c++, r, ""+expInfo.cnt, false, latencyTestSheet);
             writeCell(c++, r, ""+expInfo.ok, false, latencyTestSheet);
             writeCell(c++, r, ""+expInfo.fail, false, latencyTestSheet);
+            writeCell(c++, r, ""+expInfo.avg, false, latencyTestSheet);
             writeCell(c++, r, ""+expInfo.min, false, latencyTestSheet);
             writeCell(c++, r, ""+expInfo.max, false, latencyTestSheet);
-            writeCell(c++, r, ""+expInfo.avg, false, latencyTestSheet);
             writeCell(c++, r, expInfo.passLatencyTest() ? "PASS" : "FAIL", false, latencyTestSheet);
         }
 
