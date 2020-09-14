@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
         permissionGranted = false;
 
         //Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_10M);
-        Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_90mbps);
+        //Data.init(Data.ModeServer.MAXST, Data.ModeBitStream.BS_90mbps);
         //Data.init(Data.ModeServer.SK, Data.ModeBitStream.BS_90mbps);
         //Data.init(Data.ModeServer.KT, Data.ModeBitStream.BS_90mbps);
-        //Data.init(Data.ModeServer.LG, Data.ModeBitStream.BS_90mbps);
+        Data.init(Data.ModeServer.LG, Data.ModeBitStream.BS_90mbps);
         requestPermission();
     }
 

@@ -94,6 +94,7 @@ public class DownloadListActivity extends AppCompatActivity {
     String expID, expName;
     DownloadInfo downloadInfo;
     GPSData lastGPSLocation;
+    String downloadedFilePath;
     //ArrayList<GPSData> gpsDataList;
 
 
@@ -275,6 +276,22 @@ public class DownloadListActivity extends AppCompatActivity {
         }).addListener(fetchListener);
     }
 
+    void recordDownloadResult(Download download, boolean success) {
+        downloadInfo.endMs = System.currentTimeMillis();
+        downloadInfo.size = download.getTotal();
+
+        downloadInfo.durMs = downloadInfo.endMs - downloadInfo.startMs;
+        downloadInfo.bytePerSec = downloadInfo.size / (float) downloadInfo.durMs;
+        downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
+
+        Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
+        etLog.append("[" + Utils.msToDate(downloadInfo.endMs) + "]:"+ (success ? "Completed" : "Error") + "\n"); //+gps
+        downloadInfo.gpsDataList.add(new GPSData(downloadInfo.endMs, lastGPSLocation.latitude, lastGPSLocation.longitude));
+
+        downloadInfo.success = success;
+        downloadedFilePath = download.getFile();
+    }
+
     //download ui listener
     final ActionListener fileActionListener = new ActionListener() {
         @Override
@@ -317,15 +334,54 @@ public class DownloadListActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                 return;
             }
-            String json = new Gson().toJson(downloadInfo);
 
-            SharedPreferences.Editor editor = sharedpreferences.edit();
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    //etLog.append("Computing Hash...\n");
+                    dialog = new ACProgressFlower.Builder(DownloadListActivity.this)
+                            .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                            .themeColor(Color.WHITE)
+                            .text("Computing Hash")
+                            .fadeColor(Color.DKGRAY).build();
+                    dialog.show();
+                }
 
-            Log.e(TAG,"recordResult:" + expID + "/" + json);
-            editor.putString(expID, json);
-            editor.commit();
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    try {
+                        File file = new File(downloadedFilePath);
+                        downloadInfo.hash = Utils.generateSHA256(file);
+                        downloadInfo.hashMatched = downloadInfo.hash.compareTo(downloadInfo.correctHash)==0;
+                        Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
 
-            updateDownload();
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+
+                    etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
+
+                    //
+                    String json = new Gson().toJson(downloadInfo);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    Log.e(TAG,"recordResult:" + expID + "/" + json);
+                    editor.putString(expID, json);
+                    editor.commit();
+
+                    updateDownload();
+                    //
+
+                    dialog.hide();
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
         }
     };
 
@@ -383,60 +439,15 @@ public class DownloadListActivity extends AppCompatActivity {
         @Override
         public void onCompleted(@NotNull Download download) {
             Log.e("DBG","Fetch:onCompleted");
-            downloadInfo.endMs = System.currentTimeMillis();
-            downloadInfo.size = download.getTotal();
-
-            downloadInfo.durMs = downloadInfo.endMs - downloadInfo.startMs;
-            downloadInfo.bytePerSec = downloadInfo.size / (float) downloadInfo.durMs;
-            downloadInfo._bytePerSec = download.getDownloadedBytesPerSecond();
-
-            Log.d(TAG,"onCompleted:" + downloadInfo.endMs);
-            etLog.append("[" + Utils.msToDate(downloadInfo.endMs) + "]:Completed\n"); //+gps
-            downloadInfo.gpsDataList.add(new GPSData(downloadInfo.endMs, lastGPSLocation.latitude, lastGPSLocation.longitude));
-
+            recordDownloadResult(download, true);
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
-
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    //etLog.append("Computing Hash...\n");
-                    dialog = new ACProgressFlower.Builder(DownloadListActivity.this)
-                            .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                            .themeColor(Color.WHITE)
-                            .text("Computing Hash")
-                            .fadeColor(Color.DKGRAY).build();
-                    dialog.show();
-                }
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    try {
-                        File file = new File(download.getFile());
-                        downloadInfo.hash = Utils.generateSHA256(file);
-                        downloadInfo.hashMatched = downloadInfo.hash.compareTo(downloadInfo.correctHash)==0;
-                        Log.d(TAG,"onCompleted:" + downloadInfo.endMs + "/" + downloadInfo.hash);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-
-                    etLog.append("SHA256 Hash:" + downloadInfo.hash + "\n");
-                    dialog.hide();
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
         }
 
         @Override
         public void onError(@NotNull Download download, @NotNull Error error, @Nullable Throwable throwable) {
             super.onError(download, error, throwable);
             Log.e("DBG","Fetch:onError");
+            recordDownloadResult(download, false);
             fileAdapter.update(download, UNKNOWN_REMAINING_TIME, UNKNOWN_DOWNLOADED_BYTES_PER_SECOND);
         }
 
