@@ -2,16 +2,20 @@ package com.tonyodev.fetchapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -375,15 +380,56 @@ public class DownloadListActivity extends AppCompatActivity {
                     editor.putString(expID, json);
                     editor.commit();
 
+                    //=== save raw exp data
+
+                    String fileName = "expRawData_" + expID + "_" + downloadInfo.endMs + ".txt";
+                    try {
+                        String contents = expName + "\n" + etLog.getText().toString();
+                        File writtenFile  = writeToFile(fileName, contents);
+                        Toast.makeText(DownloadListActivity.this, "실험 로우데이터 저장에 성공했습니다..", Toast.LENGTH_SHORT).show();
+                        openFile(writtenFile);
+                    } catch (IOException ioe) {
+                        Toast.makeText(DownloadListActivity.this, "실험 로우데이터 저장에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //===
+
                     updateDownload();
                     //
 
                     dialog.hide();
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
         }
     };
+
+
+
+    public void openFile(File writtenFile) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        Uri fileUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", writtenFile);
+        //Uri fileUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", writtenFile);
+        intent.setData(fileUri);
+
+        startActivity(intent);
+    }
+
+    private File writeToFile(String fileName, String content) throws IOException {
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + fileName);
+
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileWriter writer = new FileWriter(file);
+        writer.append(content);
+        writer.flush();
+        writer.close();
+
+        return file;
+    }
 
 
     //fetch downloader listener
