@@ -83,6 +83,7 @@ public class DownloadListActivity extends AppCompatActivity {
     static final long UNKNOWN_DOWNLOADED_BYTES_PER_SECOND = 0;
     //static final long GPS_SAVE_PERIOD_MS =  1;
     static final long GPS_SAVE_PERIOD_MS =  60*1000;
+    static final boolean USE_GPS = false;
 
     static final String FETCH_NAMESPACE = "DownloadListActivity";
     static final String TAG = "DownloadListActivity";
@@ -237,9 +238,12 @@ public class DownloadListActivity extends AppCompatActivity {
         if(expData!=null) {
             showExpSummary(expData);
         } else {
-            startLocationUpdates();
-            waitLocationUpdates();
-
+            if(USE_GPS) {
+                startLocationUpdates();
+                waitLocationUpdates();
+            } else {
+                lastGPSLocation = new GPSData(System.currentTimeMillis(), 0, 0);
+            }
             enqueueDownloads();
             updateDownloadUI();
         }
